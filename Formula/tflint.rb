@@ -3,7 +3,6 @@ class Tflint < Formula
   homepage "https://github.com/wata727/tflint"
   url "https://github.com/terraform-linters/tflint/archive/v0.15.4.tar.gz"
   sha256 "3378055e8f1591c46d313765b4579d7484612ce88bea5222e5d0d14f4f8e5cef"
-  revision 1
   head "https://github.com/wata727/tflint.git"
 
   bottle do
