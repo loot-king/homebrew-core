@@ -1,15 +1,16 @@
 class DockerGen < Formula
   desc "Generate files from docker container metadata"
   homepage "https://github.com/jwilder/docker-gen"
-  url "https://github.com/jwilder/docker-gen/archive/0.7.5.tar.gz"
-  sha256 "6cbf434cef66132337dda09250b25313da3b2a56eb4cbc8dda8ae8404eff59ca"
+  url "https://github.com/jwilder/docker-gen/archive/0.7.7.tar.gz"
+  sha256 "12e9b71bad7e5ab18a32b994e96423f9b68df840892db19cbe3a18cba1823d36"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "3c85b99b9c196d88d88f1b841b945581dbf532a535d5ae9eddcba113186479c2"
-    sha256 cellar: :any_skip_relocation, big_sur:       "a8e0c7dc323e6d12139778d740422435c4f7e8c5515ea1fe1b3020cbf570aefa"
-    sha256 cellar: :any_skip_relocation, catalina:      "de774435b70a8ef725753d6f21c53059ff9702e40579eeca873b2bbd58d57e9f"
-    sha256 cellar: :any_skip_relocation, mojave:        "f9fd70bd526ee9deedac3d51b76fc680ab9bd6ff0a15bec040ecec682c8ee000"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "66b8c1c35b2f64e34d4569758bf6629e4d810176c91fcd85522b9d7c190694c5"
+    sha256 cellar: :any_skip_relocation, big_sur:       "68fe85441e755d75d01d2f897ff47a50a55c00eeda1f9ec8f9d26bdde1005be3"
+    sha256 cellar: :any_skip_relocation, catalina:      "084de82737d60acf60f584fc4f8ad684a112a92e825ac8fa0aeefad61e987b8d"
+    sha256 cellar: :any_skip_relocation, mojave:        "ab933d1006253f737c39cdd625ce4b31c5e2b0df3779ed69f104ff1edec36d77"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fb5c8240bd6614dcdf3c84693ae65bb7a0fd5e4527fec2e496de240bd9068ffe"
   end
 
   depends_on "go" => :build

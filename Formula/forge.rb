@@ -1,8 +1,8 @@
 class Forge < Formula
   desc "High Performance Visualization"
   homepage "https://github.com/arrayfire/forge"
-  url "https://github.com/arrayfire/forge/archive/v1.0.6.tar.gz"
-  sha256 "dab4d4c0b5c0656d402050bf082ec0f7cf3618a622cc281135a3eaebaf9ac46e"
+  url "https://github.com/arrayfire/forge/archive/v1.0.8.tar.gz"
+  sha256 "77d2581414d6392aa51748454b505a747cd63404f63d3e1ddeafae6a0664419c"
   license "BSD-3-Clause"
 
   livecheck do
@@ -11,10 +11,11 @@ class Forge < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "f3a2101af773f47ef9da29e1468f6af7f9a81c418111930e2f88362581249d57"
-    sha256 cellar: :any, big_sur:       "a013b723b0118001a054cb6f0d3d917f90e9823c376718a3057bf9a1ba250ed1"
-    sha256 cellar: :any, catalina:      "5321a0dd20592b5450308b4f527d75c1547b964fb1a7e1eaba9c6facdc46fe1c"
-    sha256 cellar: :any, mojave:        "17d114d5023f66c30cf3378d43031d5847cb85ac4e529cba849752333bad8cbb"
+    sha256 cellar: :any,                 arm64_big_sur: "648b7ce9d0146143fd3aa7ce40ac8989bc5af8552b58f6a54406d67b9dc37bc4"
+    sha256 cellar: :any,                 big_sur:       "cac8109b34dd4f8e8f76dcd21d7fbd765fe5155cc150e22114158f42448244f6"
+    sha256 cellar: :any,                 catalina:      "7081807afb00024e9d58507d6280f52fc2a9b9ec4dd3076ea5d8a77552e183c6"
+    sha256 cellar: :any,                 mojave:        "c115a44a1b7cc3c7f0fc512bab0a4a7f91a00b7357c0f286fada3a10c2d8b1b5"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a1591da537a4be701c5500b89ae05525d2390eef4d1d66cb49a9c219d500aa87"
   end
 
   depends_on "boost" => :build

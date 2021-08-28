@@ -8,7 +8,7 @@ class Asciiquarium < Formula
   url "https://robobunny.com/projects/asciiquarium/asciiquarium_1.1.tar.gz"
   sha256 "1b08c6613525e75e87546f4e8984ab3b33f1e922080268c749f1777d56c9d361"
   license "GPL-2.0-or-later"
-  revision 2
+  revision 3
 
   livecheck do
     url "https://robobunny.com/projects/asciiquarium/"
@@ -16,9 +16,11 @@ class Asciiquarium < Formula
   end
 
   bottle do
-    sha256 cellar: :any, big_sur:  "b265b239e7c9d417614d16e8df9d000b4b5a74419fa3b9c951f89e38e2d6f2c5"
-    sha256 cellar: :any, catalina: "549e7df42d697e47ff38029b4e0d3df4404046ba52296e713b47d02aab0babe7"
-    sha256 cellar: :any, mojave:   "75d26ee7c7db2b3f8a66216224a13405288fa436123c5c80e53b2f9a9bcfdb3b"
+    sha256 cellar: :any,                 arm64_big_sur: "8c9d6bd3efb4262f656cfc13688ab05f0170ef2722bed28a77e0857c2473750a"
+    sha256 cellar: :any,                 big_sur:       "ed80b66a1dad41855acd00b13b9c0d038f5bd3d8aaf59a7875bf5f317d38bb11"
+    sha256 cellar: :any,                 catalina:      "cfd54b1753a801f6d6e74bcebd384e9d8b1dd9a51eb5271ff0a76e0d392c41fa"
+    sha256 cellar: :any,                 mojave:        "1e50254a2473ef040dafa627205372aad2077fcbd04c8e062fe92344c9936eeb"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ad3d1c9523192031f36ff1699cf759276f99b1810164c65cc49c0de7dd58cf67"
   end
 
   depends_on "ncurses"
@@ -56,6 +58,10 @@ class Asciiquarium < Formula
   end
 
   test do
+    on_linux do
+      return if ENV["HOMEBREW_GITHUB_ACTIONS"]
+    end
+
     # This is difficult to test because:
     # - There are no command line switches that make the process exit
     # - The output is a constant stream of terminal control codes

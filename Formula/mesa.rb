@@ -3,21 +3,22 @@ class Mesa < Formula
 
   desc "Graphics Library"
   homepage "https://www.mesa3d.org/"
-  url "https://archive.mesa3d.org/mesa-21.0.3.tar.xz"
-  sha256 "565c6f4bd2d5747b919454fc1d439963024fc78ca56fd05158c3b2cde2f6912b"
+  url "https://mesa.freedesktop.org/archive/mesa-21.2.0.tar.xz"
+  sha256 "0cb3c802f4b8e7699b1602c08c29d06a4d532ab5b8f7a64676c4ca6bb8f4d426"
   license "MIT"
-  head "https://gitlab.freedesktop.org/mesa/mesa.git"
+  head "https://gitlab.freedesktop.org/mesa/mesa.git", branch: "main"
 
   livecheck do
-    url "https://archive.mesa3d.org/"
-    regex(/href=.*?mesa[._-]v?(\d+(?:\.\d+)+)\.t/i)
+    url "https://www.mesa3d.org/news/"
+    regex(/>\s*Mesa v?(\d+(?:\.\d+)+) is released\s*</i)
   end
 
   bottle do
-    sha256 arm64_big_sur: "bbf7549e32809888991466828171e879e42ce6c43d1cba9d24b5153de7c37b4c"
-    sha256 big_sur:       "57e29996782f3f26e1f8acbf80c8f379c80c41c6a4416326feffd2248c5a2b1c"
-    sha256 catalina:      "3773091e14cd5edad4eace8704823ef3bbe6f1627c485e89942b41ea859d7c82"
-    sha256 mojave:        "eeb3f8757ed4e113e27784cc441182ed32e8a43f50ed064ce11b6e211e9c34db"
+    sha256 arm64_big_sur: "65138ca70442cf7485ff98c028864eacced13c7b2fc62146f9026b2e7f501e05"
+    sha256 big_sur:       "6bed8a72c96b4844286c7e9666b8ea0c887891a6b867904900faf6ffd61d875e"
+    sha256 catalina:      "af5a8c808d643c0d64f70e33543a6a9c18c771152fbac4f5b8dad86167c053ed"
+    sha256 mojave:        "7308951bd120ed6de6cb3838cbc358f0b210f61e102ff366cb1b8a5c988b9ded"
+    sha256 x86_64_linux:  "066e8c5709d5cae301b73348f43f72897203286e4b5d7115070ccc58bb68c5b6"
   end
 
   depends_on "meson" => :build
@@ -30,6 +31,31 @@ class Mesa < Formula
   depends_on "libxcb"
   depends_on "libxdamage"
   depends_on "libxext"
+
+  uses_from_macos "bison" => :build
+  uses_from_macos "flex" => :build
+  uses_from_macos "llvm"
+  uses_from_macos "ncurses"
+  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "gcc"
+    depends_on "lm-sensors"
+    depends_on "libelf"
+    depends_on "libxfixes"
+    depends_on "libxrandr"
+    depends_on "libxshmfence"
+    depends_on "libxv"
+    depends_on "libxvmc"
+    depends_on "libxxf86vm"
+    depends_on "libva"
+    depends_on "libvdpau"
+    depends_on "libdrm"
+    depends_on "wayland"
+    depends_on "wayland-protocols"
+  end
+
+  fails_with gcc: "5"
 
   resource "Mako" do
     url "https://files.pythonhosted.org/packages/5c/db/2d2d88b924aa4674a080aae83b59ea19d593250bfe5ed789947c21736785/Mako-1.1.4.tar.gz"
@@ -46,11 +72,6 @@ class Mesa < Formula
     sha256 "c727b2341d81c2a1b8a0b31e46d24f9702a1ec55c8be3f455ddc8d72120ada72"
   end
 
-  patch do
-    url "https://gitlab.freedesktop.org/mesa/mesa/-/commit/50064ad367449afad03c927f7e572c138b05c5d4.diff"
-    sha256 "2f17f8f03a54350025fff65ec6d410b1c2f924a30199551457a0f43a9bada7b6"
-  end
-
   def install
     ENV.prepend_path "PATH", Formula["python@3.9"].opt_libexec/"bin"
 
@@ -61,9 +82,36 @@ class Mesa < Formula
     ENV.prepend_path "PATH", "#{venv_root}/bin"
 
     mkdir "build" do
-      system "meson", *std_meson_args, "..", "-Db_ndebug=true"
+      args = ["-Db_ndebug=true"]
+
+      on_linux do
+        args << "-Dplatforms=x11,wayland"
+        args << "-Dglx=auto"
+        args << "-Ddri3=true"
+        args << "-Ddri-drivers=auto"
+        args << "-Dgallium-drivers=auto"
+        args << "-Dgallium-omx=disabled"
+        args << "-Degl=true"
+        args << "-Dgbm=true"
+        args << "-Dopengl=true"
+        args << "-Dgles1=true"
+        args << "-Dgles2=true"
+        args << "-Dxvmc=true"
+        args << "-Dvalgrind=false"
+        args << "-Dtools=drm-shim,etnaviv,freedreno,glsl,nir,nouveau,xvmc,lima"
+      end
+
+      system "meson", *std_meson_args, "..", *args
       system "ninja"
       system "ninja", "install"
+    end
+
+    on_linux do
+      # Strip executables/libraries/object files to reduce their size
+      system("strip", "--strip-unneeded", "--preserve-dates", *(Dir[bin/"**/*", lib/"**/*"]).select do |f|
+        f = Pathname.new(f)
+        f.file? && (f.elf? || f.extname == ".a")
+      end)
     end
   end
 

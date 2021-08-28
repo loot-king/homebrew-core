@@ -1,16 +1,17 @@
 class Inetutils < Formula
   desc "GNU utilities for networking"
   homepage "https://www.gnu.org/software/inetutils/"
-  url "https://ftp.gnu.org/gnu/inetutils/inetutils-2.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/inetutils/inetutils-2.0.tar.xz"
-  sha256 "e573d566e55393940099862e7f8994164a0ed12f5a86c3345380842bdc124722"
+  url "https://ftp.gnu.org/gnu/inetutils/inetutils-2.1.tar.xz"
+  mirror "https://ftpmirror.gnu.org/inetutils/inetutils-2.1.tar.xz"
+  sha256 "01b9a4bc73a47e63f6e8a07b76122d9ad2a2e46ebf14870e9c91d660b5647a22"
   license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "82b61f26f0dc565334619a3ca34994cfea99088e25db94bd15706037a2c49b61"
-    sha256 cellar: :any, big_sur:       "31f0fdd6e2bdc5ed3e25d46aa8c47c2e0d6c9fe13011fe4c388388eead919676"
-    sha256 cellar: :any, catalina:      "8fd3005c6e2914ee9d3d2f513bfa903827a94a74a232f1553d9a113aba1eddc2"
-    sha256 cellar: :any, mojave:        "85a50b1e624497625bea4c836be1005dfd60c11814778e09153acf256a9e3992"
+    sha256 arm64_big_sur: "4a8140152f9835c3514bc2b6611bcbc9538b8f1cad934293391a4eeec6d6e805"
+    sha256 big_sur:       "f6d9546c6db38817ce79a2f1501bc5aa08f776405bba44e69ec7735f162f03bc"
+    sha256 catalina:      "ebf5775904960cad8ee453c70a7fda0a08cbf7e3d40246a6314a728a12f560bc"
+    sha256 mojave:        "81eb41d9e9e7417d22b81a82833de89e8f7fc4e1fa4251def162c88325824fc5"
+    sha256 x86_64_linux:  "dc846ec369403d37b0355ebb8ba7199a50f0215b88b098472ece04eee19aacaa"
   end
 
   depends_on "libidn"
@@ -37,7 +38,7 @@ class Inetutils < Formula
       args << "--program-prefix=g"
     end
     system "./configure", *args
-    system "make", "install"
+    system "make", "SUIDMODE=", "install"
 
     on_macos do
       # Binaries not shadowing macOS utils symlinked without 'g' prefix

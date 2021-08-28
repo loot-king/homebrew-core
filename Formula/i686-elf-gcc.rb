@@ -1,15 +1,21 @@
 class I686ElfGcc < Formula
   desc "GNU compiler collection for i686-elf"
   homepage "https://gcc.gnu.org"
-  url "https://ftp.gnu.org/gnu/gcc/gcc-10.3.0/gcc-10.3.0.tar.xz"
-  mirror "https://ftpmirror.gnu.org/gcc/gcc-10.3.0/gcc-10.3.0.tar.xz"
-  sha256 "64f404c1a650f27fc33da242e1f2df54952e3963a49e06e73f6940f3223ac344"
+  url "https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"
+  mirror "https://ftpmirror.gnu.org/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"
+  sha256 "d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b"
   license "GPL-3.0-or-later" => { with: "GCC-exception-3.1" }
 
+  livecheck do
+    formula "gcc"
+  end
+
   bottle do
-    sha256 big_sur:  "b08b99ff3b7ae42ef378cc46b614170f232098dcc0a650d7557637d2135809e2"
-    sha256 catalina: "3c71adb21e1e28dbcb124437cdd0f1de8a1d5fab8aa834ccfe67735f6af55fe9"
-    sha256 mojave:   "486dc517f6e1e21d96f3483eb7f8ab12a6e989c251cab9cd07d70fa01f4574e6"
+    sha256 arm64_big_sur: "03ea1c0b8db4064c4acd673fb1138d410699bd37c74db3e255479f93fe0f991b"
+    sha256 big_sur:       "cbf70ba4c4dcd222b84b9bde4e3f69a8c621959e20facaa8677ebd0b0f14d4da"
+    sha256 catalina:      "7aec8ee5b87f0a56236b59c4e796ec8eb5e991b3d2163a745bc9dbc12068592d"
+    sha256 mojave:        "b0f9c1aafd4ecaace843bb77ec4062a7dc0f3b61f40506c762ad79d586811a51"
+    sha256 x86_64_linux:  "33a850dd3e3c9b93c2899ff81ddd4199a942ac763691e829733ec87aa5eea732"
   end
 
   depends_on "gmp"
@@ -17,11 +23,21 @@ class I686ElfGcc < Formula
   depends_on "libmpc"
   depends_on "mpfr"
 
+  # Remove when upstream has Apple Silicon support
+  if Hardware::CPU.arm?
+    patch do
+      # patch from gcc-11.1.0-arm branch
+      url "https://github.com/fxcoudert/gcc/commit/eea3046c5fa62d4dee47e074c7a758570d9da61c.patch?full_index=1"
+      sha256 "b55ca05a0ed32f69f63bbe708568df5ad62d938da0e34b515d601bb966d32d40"
+    end
+  end
+
   def install
+    target = "i686-elf"
     mkdir "i686-elf-gcc-build" do
-      system "../configure", "--target=i686-elf",
+      system "../configure", "--target=#{target}",
                              "--prefix=#{prefix}",
-                             "--infodir=#{info}/i686-elf-gcc",
+                             "--infodir=#{info}/#{target}",
                              "--disable-nls",
                              "--without-isl",
                              "--without-headers",

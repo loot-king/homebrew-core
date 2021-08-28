@@ -1,15 +1,16 @@
 class VirustotalCli < Formula
   desc "Command-line interface for VirusTotal"
   homepage "https://github.com/VirusTotal/vt-cli"
-  url "https://github.com/VirusTotal/vt-cli/archive/0.9.3.tar.gz"
-  sha256 "7ae5335bfb764b1f85f049f3771be0621e96329f0af72a35db25a77821e96ab7"
+  url "https://github.com/VirusTotal/vt-cli/archive/0.9.7.tar.gz"
+  sha256 "3effbc318116ddfdc41c2d8e5e885da93f43614dbf1704557bf9f347553bd5ff"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "eaa827cc780221725ab0a784772f714f5efba9d346f8249167883fa38991f621"
-    sha256 cellar: :any_skip_relocation, big_sur:       "7325dd9a2f1b744bce567fd46e5d0fe345dc0349a8c2c9006a2c3c64119536e2"
-    sha256 cellar: :any_skip_relocation, catalina:      "0b50fa33daf59c8f160dd6b48cd3c742c1037c7874ca1307a6ab7e0dfb1a33b8"
-    sha256 cellar: :any_skip_relocation, mojave:        "b7488fbcf0d95e3cc3ead35947fab271bb5f6408d5622ecad7ea79834cb29c9a"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "41f0fa1b0a8744878323478f8bb5189c70d21dddc1a7e326294e31f7c44464ef"
+    sha256 cellar: :any_skip_relocation, big_sur:       "ce8bd2abe3a1137debb26192a4bf43faf2064a54cbf4f7eabf94256317973baa"
+    sha256 cellar: :any_skip_relocation, catalina:      "bf9f0b5b6577a82a8410774087d6ef894ba68a4e465dd8a5e0c9093c5828bab6"
+    sha256 cellar: :any_skip_relocation, mojave:        "a66cbde56c35079ad8af5c80c28ae892c57f0c750fa64be992b207a645235a8a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "cfbca0fb8d2885fd92cf8c276ab80a29534c5d4a9a755943a98b6f7182e7722a"
   end
 
   depends_on "go" => :build

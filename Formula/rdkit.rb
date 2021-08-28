@@ -1,16 +1,25 @@
 class Rdkit < Formula
   desc "Open-source chemoinformatics library"
   homepage "https://rdkit.org/"
-  url "https://github.com/rdkit/rdkit/archive/Release_2021_03_1.tar.gz"
-  sha256 "9495f797a54ac70b3b6e12776de7d82acd7f7b5d5f0cc1f168c763215545610b"
+  url "https://github.com/rdkit/rdkit/archive/Release_2021_03_5.tar.gz"
+  sha256 "ee7ed4189ab03cf805ab9db59121ab3ebcba4c799389d053046d7cab4dd8401e"
   license "BSD-3-Clause"
-  head "https://github.com/rdkit/rdkit.git"
+  head "https://github.com/rdkit/rdkit.git", branch: "master"
+
+  livecheck do
+    url :stable
+    regex(/^Release[._-](\d+(?:[._]\d+)+)$/i)
+    strategy :git do |tags|
+      tags.map { |tag| tag[regex, 1]&.gsub("_", ".") }.compact
+    end
+  end
 
   bottle do
-    sha256 arm64_big_sur: "b3c25f8041b97feb1d44b0881ade496bc030ef7cd7bb472b0e5f2f3ed15c70e5"
-    sha256 big_sur:       "b858bd08a423315f15f0e261730488fe1e303734ab07cc8ca31d9dfb10272f6d"
-    sha256 catalina:      "a809feb8d0cff4c9c1a357d7e434de5cefc42e254ea47d65079e6c72d4322ad8"
-    sha256 mojave:        "e5aaf566b2d5a33553bc626eb99e785da5359a1e803d3abbeb86501804f9ffb7"
+    sha256 cellar: :any,                 arm64_big_sur: "afc72d00f5d6ce27e32d9f29c8fae0b4e19177b44d7fb626ed0831c336685606"
+    sha256 cellar: :any,                 big_sur:       "66468b15e7392d673b64fb3ccd88d54d0a1f12fc20741f2aebbfccac7aaeb982"
+    sha256 cellar: :any,                 catalina:      "1e4bb08e11fd7acb40c17521032f9f99735fde9b8ac0a89c14a8557ea13f8c57"
+    sha256 cellar: :any,                 mojave:        "88689935bdc08604cecf7f278dade986ea7942cec5f3a9d7d5f1aca16330187f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "72b0839c48f2202ebccc1a67c36c69a2da74df16812cae1ea1bfe9dd88f68e1d"
   end
 
   depends_on "cmake" => :build
@@ -65,6 +74,9 @@ class Rdkit < Formula
     system "cmake", ".", *args
     system "make"
     system "make", "install"
+
+    site_packages = "lib/python#{py3ver}/site-packages"
+    (prefix/site_packages/"homebrew-rdkit.pth").write libexec/site_packages
   end
 
   def caveats
@@ -76,6 +88,7 @@ class Rdkit < Formula
   end
 
   test do
+    system Formula["python@3.9"].opt_bin/"python3", "-c", "import rdkit"
     (testpath/"test.py").write <<~EOS
       from rdkit import Chem ; print(Chem.MolToSmiles(Chem.MolFromSmiles('C1=CC=CN=C1')))
     EOS

@@ -1,15 +1,16 @@
 class Kubeprod < Formula
   desc "Installer for the Bitnami Kubernetes Production Runtime (BKPR)"
   homepage "https://kubeprod.io"
-  url "https://github.com/bitnami/kube-prod-runtime/archive/v1.7.0.tar.gz"
-  sha256 "8bc41467511e69b53e29257ffd588fbaca6a904f3bec04493a1e7eb7048ea67d"
+  url "https://github.com/bitnami/kube-prod-runtime/archive/v1.8.0.tar.gz"
+  sha256 "cc2fbda4c115d164afcaaabbbef4b5824b9b09b6df95d9cce021aee50c2ad2c1"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "0c06463709376ab375246b30e50e1f3f71fcf57a9219d710994d9a5fadde4199"
-    sha256 cellar: :any_skip_relocation, big_sur:       "3286c04ea5d7d7a198791ebb2a69ae172c6fb5cfc2c1013c1d7b7e66d3053dcd"
-    sha256 cellar: :any_skip_relocation, catalina:      "e7aa12f3c6d2900563d0c9996ff6a16b235eeb3f94617b3c6cd38a1571c06f35"
-    sha256 cellar: :any_skip_relocation, mojave:        "75f7896a2872579b7bc7626ad92b8e2956541fb5d217712009c2ce81e379b565"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "0cf8f68102f72c4f3dc4398baa40bed174c9383fe70d6c092416a2413b59fea7"
+    sha256 cellar: :any_skip_relocation, big_sur:       "b5bcbbcfb672ba55f4cc8ff037265ad5609637c680a3913ed70902fcd942446f"
+    sha256 cellar: :any_skip_relocation, catalina:      "d93e5540cc7b2b7a479b69613c9aab0e9809a838cb1241f20650c01c9c37fc56"
+    sha256 cellar: :any_skip_relocation, mojave:        "8eacc39ef3927f4405137db71864e0db6d0b27f97d5c5499f00d5d60ed58eebc"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d33e013a915ab5b777bcdf0d11476c55905896c29cf168c76558bf66e6753403"
   end
 
   depends_on "go" => :build

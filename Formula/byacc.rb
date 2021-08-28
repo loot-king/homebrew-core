@@ -1,8 +1,8 @@
 class Byacc < Formula
   desc "(Arguably) the best yacc variant"
   homepage "https://invisible-island.net/byacc/"
-  url "https://invisible-mirror.net/archives/byacc/byacc-20210328.tgz"
-  sha256 "8b8f258eb22a4eae994ee374a712dd08e023cde1c39b373e8db8ba7806c50585"
+  url "https://invisible-mirror.net/archives/byacc/byacc-20210808.tgz"
+  sha256 "f158529be9d0594263c7f11a87616a49ea23e55ac63691252a2304fbbc7d3a83"
   license :public_domain
 
   livecheck do
@@ -11,10 +11,11 @@ class Byacc < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "be4ed7e396441833b8b78810ad409af5eb9f46aad11afe31f289d288e5a918cf"
-    sha256 cellar: :any_skip_relocation, big_sur:       "041c1b96c3fd1815773852b0bde4b02299b38a07b3c88f6241118272f7ec986c"
-    sha256 cellar: :any_skip_relocation, catalina:      "e14682e1ef9fbdc9c8ad4d999eae995deb9e1130d30383f065aa1c2ca9527dee"
-    sha256 cellar: :any_skip_relocation, mojave:        "0bf94e42d846dc2ab79de8e9861f78ec6c372a07c215ceaa39e424ce45931c9b"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "ea7bf5ff3f3685261e4ebcdb7f4b137806ef294e6f88a81aa7723f95bcf04645"
+    sha256 cellar: :any_skip_relocation, big_sur:       "e6d14688cd201d229766c304bc568bf841e0660ac4309063f6a6a16d4217ff52"
+    sha256 cellar: :any_skip_relocation, catalina:      "d610e1d60b0a483e82b5d2f710960e914f7738535a0ac7125ab0c6465d89abe6"
+    sha256 cellar: :any_skip_relocation, mojave:        "bc45ca552799eddfc91158ab0ebd9c8152828e1a21d992b5d7402813a72dd2d6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "387ebfc719409f19a7ccabbc79ba1a93213b378881bce09f8bba14487757e556"
   end
 
   def install

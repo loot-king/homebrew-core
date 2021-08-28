@@ -1,16 +1,17 @@
 class Dune < Formula
   desc "Composable build system for OCaml"
   homepage "https://dune.build/"
-  url "https://github.com/ocaml/dune/releases/download/2.8.5/dune-2.8.5.tbz"
-  sha256 "79011283fb74c7a27eb17ad752efbcc39b39633cbacc8d7be97e8ea869443629"
+  url "https://github.com/ocaml/dune/releases/download/2.9.0/dune-2.9.0.tbz"
+  sha256 "bb217cfb17e893a0b1eb002ac83c14f96adc9d0703cb51ff34ed3ef5a639a41e"
   license "MIT"
   head "https://github.com/ocaml/dune.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "12e163bf98bb89f2ffb1dca8377fb9451810747ec49010bbf98d865e9557dfeb"
-    sha256 cellar: :any_skip_relocation, big_sur:       "ec1d76962b672d6c25a6431332b91073c4bb8b72fd1cfc235f5809f169e92962"
-    sha256 cellar: :any_skip_relocation, catalina:      "202f2676e5aabbe4c258c74655dc8a2b0ed1fbb4d216fbea848a4496ddfb432f"
-    sha256 cellar: :any_skip_relocation, mojave:        "a1bbc9a63c5dec97bda2dc55ad03ada0e25c17a328102c31f2e1d272ab33062f"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4fa74cea5ac8d6c4a67cb034edceb0d72c187884b0cbd67abababa77cbd81b19"
+    sha256 cellar: :any_skip_relocation, big_sur:       "0f09b1e8ddf82fe3a684b4b770ef559dc65d63c3d8a3bae9472ab53c7de0011b"
+    sha256 cellar: :any_skip_relocation, catalina:      "d5104b9a1a15dcf219e96fe3c51f55f9c22d13dabcf5b20fc6355b19613ca688"
+    sha256 cellar: :any_skip_relocation, mojave:        "eff381531b552f4ca7b11a4e2e560a87175e7488ded036a4a95b6ca2e69303a1"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "45799372a97201b95b0928303067cfbf6d4ee904a7111235a4c3bb70779cc162"
   end
 
   depends_on "ocaml" => [:build, :test]

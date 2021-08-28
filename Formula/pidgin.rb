@@ -1,8 +1,8 @@
 class Pidgin < Formula
   desc "Multi-protocol chat client"
   homepage "https://pidgin.im/"
-  url "https://downloads.sourceforge.net/project/pidgin/Pidgin/2.14.3/pidgin-2.14.3.tar.bz2"
-  sha256 "2b064802fdfec008878f7179120ccf1e67c68b46ec0966399a095e20bc762e76"
+  url "https://downloads.sourceforge.net/project/pidgin/Pidgin/2.14.6/pidgin-2.14.6.tar.bz2"
+  sha256 "bb45f7c032f9efd6922a5dbf2840995775e5584771b23992d04f6eff7dff5336"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -12,10 +12,10 @@ class Pidgin < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "e2b178515217fb63cbe0be950266641bec4c081f69d0f4f6e3d17208dcf0ca01"
-    sha256 big_sur:       "a07a994f185f9d8bda85d3d7b812cd06a36ff00b024cead6b66cc2eaa9045195"
-    sha256 catalina:      "773866db0ff444dd81f28d39b398fd1285be8eac07fe67317f525fa64c2f59a1"
-    sha256 mojave:        "8fe5b6b7c59c963a7ad97eab03bbaa314e84f06511fe43398572a31c3ab7eb13"
+    sha256 arm64_big_sur: "fd09b46fab5d0f4e52d6b460081814cbed9dc446cc6cb379976678acf48045a9"
+    sha256 big_sur:       "65c8b20b138eccee7e7a45280080c161f643cb570ba2b8258b9912dfd2784f00"
+    sha256 catalina:      "54287daa973969e51387ebd2cbf46d58d29d010b6f8902a1029852fdb83b20ff"
+    sha256 mojave:        "a1e76cc27f0aec4899968c82c85db0f78fd2f1b9ec9e266799ca83e32d03abd3"
   end
 
   depends_on "intltool" => :build

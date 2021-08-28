@@ -2,21 +2,24 @@ class Agda < Formula
   desc "Dependently typed functional programming language"
   homepage "https://wiki.portal.chalmers.se/agda/"
   license "BSD-3-Clause"
+  revision 2
 
   stable do
-    url "https://hackage.haskell.org/package/Agda-2.6.1.3/Agda-2.6.1.3.tar.gz"
-    sha256 "bb1bc840cee95eea291bd220ea043b60153a6f7bd8198bc53be2bf3b83c8a1e7"
+    url "https://hackage.haskell.org/package/Agda-2.6.2/Agda-2.6.2.tar.gz"
+    sha256 "072caaad7a405b764423958d2001b68fbfd3fc8f98870cd0a5f0bcaeadfd3095"
 
     resource "stdlib" do
-      url "https://github.com/agda/agda-stdlib/archive/v1.5.tar.gz"
-      sha256 "ff486a5540dafb9cb53f989904b21ff70d4c7a226780cf330e08f4d133424c4d"
+      url "https://github.com/agda/agda-stdlib/archive/v1.7.tar.gz"
+      sha256 "180302df8bdd01fd404ae5ee217d4c04376fcfbab2b70958a87109df531e299d"
     end
   end
 
   bottle do
-    sha256 big_sur:  "8a5e4d0c98e1d1a2e4f23788c60679a1a9ccb200876db602e3a26c97de9ba90d"
-    sha256 catalina: "e4033aa9b7b376f0e31fae79a36cdcc1203cc3c5901b9c53e7e4371b86aec1b8"
-    sha256 mojave:   "94cb23fbc0d49c2da13eedbfecd5bbac1826264c5b099f5b24c5a9804d3c52d5"
+    sha256 arm64_big_sur: "c7baff979a3b1d808bbd8c22f3eb246db593cea21df144865576fac01710ed49"
+    sha256 big_sur:       "9072742c57132671ea5246b526f602d10994aa12b773f39b0d35d8b781c24f98"
+    sha256 catalina:      "5bf2ec66f3afe40a457aa443f3bbd6dda01a565eb3d1706cfd872a83165981d6"
+    sha256 mojave:        "db59d32055496482f06e18630667e190fb8299033d28c06a899afa238239e4b9"
+    sha256 x86_64_linux:  "776e8b2131d576072c3a3126ce70376817e6a6cbabaf946c8e1f112da40fa39f"
   end
 
   head do

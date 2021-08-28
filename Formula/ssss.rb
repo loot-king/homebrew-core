@@ -3,7 +3,12 @@ class Ssss < Formula
   homepage "http://point-at-infinity.org/ssss/"
   url "http://point-at-infinity.org/ssss/ssss-0.5.tar.gz"
   sha256 "5d165555105606b8b08383e697fc48cf849f51d775f1d9a74817f5709db0f995"
-  license "GPL-2.0"
+  license "GPL-2.0-or-later"
+
+  livecheck do
+    url :homepage
+    regex(/href=.*?ssss[._-]v?(\d+(?:\.\d+)+)\.t/i)
+  end
 
   bottle do
     sha256 cellar: :any, arm64_big_sur: "c1656cbcd114f1e8269d54fa5b525ceababe178d0fddec508fdb568d747035f0"

@@ -1,16 +1,18 @@
 class Oauth2Proxy < Formula
   desc "Reverse proxy for authenticating users via OAuth 2 providers"
   homepage "https://oauth2-proxy.github.io/oauth2-proxy/"
-  url "https://github.com/oauth2-proxy/oauth2_proxy/archive/v7.1.2.tar.gz"
-  sha256 "cf2a921179a23542e74e12e1ecfd2b17e9fd7958382ab952e17f94ec0ac69f2b"
+  url "https://github.com/oauth2-proxy/oauth2_proxy/archive/v7.1.3.tar.gz"
+  sha256 "b6d45f3b44a98002ce8f3b581ffd79ade33fb19f374093df43564464439257ad"
   license "MIT"
   head "https://github.com/oauth2-proxy/oauth2-proxy.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "dfa49171c9d83564d4fff72b9d076e4d80c27fc6018ad41bc8ee4017b23747cf"
-    sha256 cellar: :any_skip_relocation, big_sur:       "4dd19a7f5ce816c6e34546ed6a25cf0057462219872ad00a2db3e98967383dde"
-    sha256 cellar: :any_skip_relocation, catalina:      "fb87c3feb08bfd5352f62c1b0ce1db9c3a295a83499c1cd03af50b4127cf1949"
-    sha256 cellar: :any_skip_relocation, mojave:        "2f2db8957ae379b637b965ecb9e3558469881f87fdf5a88cb960f4a6e321193c"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "30e32e8b0b482dfd924fbabc8eb909e91afd46340f2c446fa779edd44c697ebb"
+    sha256 cellar: :any_skip_relocation, big_sur:       "070c01170bb8b590d5b4d2d058a6dc20305dd6d00d1aa0691cecf4d55a8902be"
+    sha256 cellar: :any_skip_relocation, catalina:      "36d3b76fe43e2c2756578afffacfb6f9b718f446020502fd9d108a46f948c9ab"
+    sha256 cellar: :any_skip_relocation, mojave:        "c4913f7f9acb77035f20c565da9cfb6011cb252101bda0ebd1ce8cc231766206"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "08c840654a0a4378635e17f3bb4f39dfcb9f0d39ea747d91cab20b243f94bd48"
   end
 
   depends_on "go" => :build
@@ -29,30 +31,10 @@ class Oauth2Proxy < Formula
     EOS
   end
 
-  plist_options manual: "oauth2-proxy"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>KeepAlive</key>
-          <true/>
-          <key>ProgramArguments</key>
-          <array>
-              <string>#{opt_bin}/oauth2-proxy</string>
-              <string>--config=#{etc}/oauth2-proxy/oauth2-proxy.cfg</string>
-          </array>
-          <key>WorkingDirectory</key>
-          <string>#{HOMEBREW_PREFIX}</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"oauth2-proxy", "--config=#{etc}/oauth2-proxy/oauth2-proxy.cfg"]
+    keep_alive true
+    working_dir HOMEBREW_PREFIX
   end
 
   test do

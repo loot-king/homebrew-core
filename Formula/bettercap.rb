@@ -1,16 +1,17 @@
 class Bettercap < Formula
   desc "Swiss army knife for network attacks and monitoring"
   homepage "https://www.bettercap.org/"
-  url "https://github.com/bettercap/bettercap/archive/v2.31.0.tar.gz"
-  sha256 "0ca3b7f623ee60d6a0fa2e3016b9eee1add2dde926f7c72c010bec5f5fbe15c4"
+  url "https://github.com/bettercap/bettercap/archive/v2.32.0.tar.gz"
+  sha256 "ea28d4d533776a328a54723a74101d1720016ffe7d434bf1d7ab222adb397ac6"
   license "GPL-3.0-only"
-  head "https://github.com/bettercap/bettercap.git"
+  head "https://github.com/bettercap/bettercap.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "21cac594fc9ad940e90acd7c1e2d8c194936b676004a17908c161c84b7c47336"
-    sha256 cellar: :any, big_sur:       "c49bbacb5e4765a8404fd0184506ccbfca2d45be2e6d866548f45bfcf73b4ffe"
-    sha256 cellar: :any, catalina:      "34f21c198abaf051ddefc85c1b42decb5b6cbb1e99cb96a7fcc336ed094eea92"
-    sha256 cellar: :any, mojave:        "64ff9cb3f98d46ea2248f8951868cd45c1d97e7c0f821d89589003a0570930cc"
+    sha256 cellar: :any,                 arm64_big_sur: "e52d4ecc4d9b34037d66f1399b4111f3753ac6fde6fdebb922170367d82578f2"
+    sha256 cellar: :any,                 big_sur:       "6ca4df5dc6af80e97961923613220f3930989b3b2ef2911609a719003500d613"
+    sha256 cellar: :any,                 catalina:      "d719df24fe3a24f2712fd5e08027b20ec0cf4a1e3e9f659d1b085a0b23bc7ee8"
+    sha256 cellar: :any,                 mojave:        "cb44f7b4fed4e8c10049d4e69f3745f78d07a70b03b77327b9e6d02e03e7c020"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4eee88cd3e242be845ff45289d6d350a5bbbe9bac3801c2a17665c770ba24492"
   end
 
   depends_on "go" => :build
@@ -36,6 +37,12 @@ class Bettercap < Formula
   end
 
   test do
-    assert_match "Operation not permitted", shell_output("#{bin}/bettercap 2>&1", 1)
+    on_macos do
+      assert_match "Operation not permitted", shell_output(bin/"bettercap 2>&1", 1)
+    end
+
+    on_linux do
+      assert_match "Permission Denied", shell_output(bin/"bettercap 2>&1", 1)
+    end
   end
 end

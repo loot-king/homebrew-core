@@ -1,15 +1,16 @@
 class Pangomm < Formula
   desc "C++ interface to Pango"
   homepage "https://www.pango.org/"
-  url "https://download.gnome.org/sources/pangomm/2.48/pangomm-2.48.0.tar.xz"
-  sha256 "9e0ed474c33f8c2002ca9e2b61ca0d1f3d8e409e09e99f4d8c19eeafccf55b78"
+  url "https://download.gnome.org/sources/pangomm/2.48/pangomm-2.48.1.tar.xz"
+  sha256 "776ad53e791e43106b7f40ff0834bee6e4eb1c6ad7cb6d215546f7a3df0edc4d"
   license "LGPL-2.1-only"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "64e96cdf092ebfaf872dbe2764208492e3e5a16e08a76c7c251335c72b949812"
-    sha256 cellar: :any, big_sur:       "eb27b7d518bd474bf2fd5a63abba60e1a14c995a858b16ec0dbb4bc51068d1c8"
-    sha256 cellar: :any, catalina:      "5ad6d772ae04e2dd5553367d92052180088798ebb1de6438f0f242aec80dc138"
-    sha256 cellar: :any, mojave:        "e71d9e1eee7e3e9c4846af03f6a45cb4a28cd0afc3cb64bde31ac5610dc1b230"
+    sha256 cellar: :any,                 arm64_big_sur: "87244c82b6ac45d8de28f5870747b96fe8bded40041dd3de159fd501b7b58754"
+    sha256 cellar: :any,                 big_sur:       "d8ea58c9fd6cece698a1605b0b3513e5818d8e0c060dc5e7357e1b0aa7325233"
+    sha256 cellar: :any,                 catalina:      "304b7e078c0c4dcbbf44e30b4912adf475f41eeda5728e65f68d45f3abcd8af4"
+    sha256 cellar: :any,                 mojave:        "6060adeb759d72e6ce9f6f7c8e076ab736b7a36107d9f1e0346ce9d9a5eaa51b"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "c430e21614121e2c6d80d456f36a36644defc60173ba969557ce58a7f6da73cb"
   end
 
   depends_on "meson" => :build
@@ -18,6 +19,12 @@ class Pangomm < Formula
   depends_on "cairomm"
   depends_on "glibmm"
   depends_on "pango"
+
+  on_linux do
+    depends_on "gcc" => :build
+  end
+
+  fails_with gcc: "5"
 
   def install
     ENV.cxx11
@@ -28,6 +35,7 @@ class Pangomm < Formula
       system "ninja", "install"
     end
   end
+
   test do
     (testpath/"test.cpp").write <<~EOS
       #include <pangomm.h>

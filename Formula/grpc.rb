@@ -2,11 +2,10 @@ class Grpc < Formula
   desc "Next generation open source RPC library and framework"
   homepage "https://grpc.io/"
   url "https://github.com/grpc/grpc.git",
-      tag:      "v1.36.4",
-      revision: "3e53dbe8213137d2c731ecd4d88ebd2948941d75",
+      tag:      "v1.39.1",
+      revision: "2d6b8f61cfdd1c4d2d7c1aae65a4fbf00e3e0981",
       shallow:  false
   license "Apache-2.0"
-  revision 1
   head "https://github.com/grpc/grpc.git"
 
   livecheck do
@@ -15,10 +14,11 @@ class Grpc < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "9b067833fdc4ec3f6bf087410b774e81e1ed906b1ae3fc882421bd553712f42a"
-    sha256 big_sur:       "17531240482c6f10c02582cb8597ca423d952a3cb42af86219f7a93c68742006"
-    sha256 catalina:      "bb505054689cc41935a3f9d6980d4e8225a2413262dcf77dda850d15852b0cf1"
-    sha256 mojave:        "d23ab851339dafacbc72f066719980f1df87251956cfa269a4ac34de018b43ed"
+    sha256 cellar: :any,                 arm64_big_sur: "fb85b55af2a6d56c790cd776ca2ddb5053422f97eec2cb0973f1eaec3eb2ce55"
+    sha256 cellar: :any,                 big_sur:       "e75d097487de766329a3b867e98bc2715c1887147e80517285f2e2a68526c09f"
+    sha256 cellar: :any,                 catalina:      "bb1674f7190928d0c4557367ea9ae93ce54f06ced9dbf6686de62832919e9186"
+    sha256 cellar: :any,                 mojave:        "9bbf5282420979603cb7902b043a2e905296f03d6b29985b953f0849ffc080fd"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8218c936d63155eb7c2240fc312db60d7ba2fd13cb30ac3d747cce9b6804b507"
   end
 
   depends_on "autoconf" => :build
@@ -34,13 +34,26 @@ class Grpc < Formula
 
   uses_from_macos "zlib"
 
+  on_macos do
+    depends_on "llvm" => :build if DevelopmentTools.clang_build_version <= 1100
+  end
+
+  fails_with :clang do
+    build 1100
+    cause "Requires C++17 features not yet implemented"
+  end
+
   def install
+    ENV.remove "HOMEBREW_LIBRARY_PATHS", Formula["llvm"].opt_lib
+    on_macos do
+      ENV.llvm_clang if DevelopmentTools.clang_build_version <= 1100
+    end
     mkdir "cmake/build" do
       args = %W[
         ../..
         -DCMAKE_CXX_STANDARD=17
         -DCMAKE_CXX_STANDARD_REQUIRED=TRUE
-        -DCMAKE_INSTALL_RPATH=#{lib}
+        -DCMAKE_INSTALL_RPATH=#{rpath}
         -DBUILD_SHARED_LIBS=ON
         -DgRPC_BUILD_TESTS=OFF
         -DgRPC_INSTALL=ON
@@ -55,21 +68,21 @@ class Grpc < Formula
       system "cmake", *args
       system "make", "install"
 
-      # grpc_cli does not build correctly with a non-/usr/local prefix.
-      # Reported upstream at https://github.com/grpc/grpc/issues/25176
-      # When removing the `unless` block, make sure to do the same for
-      # the test block.
-      unless Hardware::CPU.arm?
-        args = %W[
-          ../..
-          -DCMAKE_INSTALL_RPATH=#{lib}
-          -DBUILD_SHARED_LIBS=ON
-          -DgRPC_BUILD_TESTS=ON
-        ] + std_cmake_args
-        system "cmake", *args
-        system "make", "grpc_cli"
-        bin.install "grpc_cli"
-        lib.install Dir[shared_library("libgrpc++_test_config", "*")]
+      args = %W[
+        ../..
+        -DCMAKE_INSTALL_RPATH=#{rpath}
+        -DBUILD_SHARED_LIBS=ON
+        -DgRPC_BUILD_TESTS=ON
+      ] + std_cmake_args
+      system "cmake", *args
+      system "make", "grpc_cli"
+      bin.install "grpc_cli"
+      lib.install Dir[shared_library("libgrpc++_test_config", "*")]
+
+      on_macos do
+        # These are installed manually, so need to be relocated manually as well
+        MachO::Tools.add_rpath(bin/"grpc_cli", rpath)
+        MachO::Tools.add_rpath(lib/shared_library("libgrpc++_test_config"), rpath)
       end
     end
   end
@@ -87,9 +100,8 @@ class Grpc < Formula
     pkg_config_flags = shell_output("pkg-config --cflags --libs libcares protobuf re2 grpc++").chomp.split
     system ENV.cc, "test.cpp", "-L#{Formula["abseil"].opt_lib}", *pkg_config_flags, "-o", "test"
     system "./test"
-    unless Hardware::CPU.arm?
-      output = shell_output("grpc_cli ls localhost:#{free_port} 2>&1", 1)
-      assert_match "Received an error when querying services endpoint.", output
-    end
+
+    output = shell_output("grpc_cli ls localhost:#{free_port} 2>&1", 1)
+    assert_match "Received an error when querying services endpoint.", output
   end
 end

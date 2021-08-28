@@ -1,16 +1,15 @@
 class Cmusfm < Formula
   desc "Last.fm standalone scrobbler for the cmus music player"
   homepage "https://github.com/Arkq/cmusfm"
-  url "https://github.com/Arkq/cmusfm/archive/v0.3.3.tar.gz"
-  sha256 "9d9fa7df01c3dd7eecd72656e61494acc3b0111c07ddb18be0ad233110833b63"
-  license "GPL-3.0"
+  url "https://github.com/Arkq/cmusfm/archive/v0.4.1.tar.gz"
+  sha256 "ff5338d4b473a3e295f3ae4273fb097c0f79c42e3d803eefdf372b51dba606f2"
+  license "GPL-3.0-or-later"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:     "d37da57d5d175d116320c1a70e1afe16d847eb4b70b459bdbc9f547e7edee7af"
-    sha256 cellar: :any_skip_relocation, catalina:    "c27aa49951efe2e485aba1eaf9527387e2fa92472bd2c1f56b5097a021dc5a64"
-    sha256 cellar: :any_skip_relocation, mojave:      "9e3320b2be61e18a10e6fef43c2c233b03670425108085c7aafa1218588cb2c9"
-    sha256 cellar: :any_skip_relocation, high_sierra: "8fc5c21846193c1187440c297d0cebdd86a83452e5c648eb9e6e813cb2385f4e"
-    sha256 cellar: :any_skip_relocation, sierra:      "f399ae3146fe9e2214e24c96ecfbd3c77866a68c692d9d60d3363ac27d39da26"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "6aa58d8aaaf982d09847ca12fa1d90a29d9697d3c396445345d6151f7268ab3e"
+    sha256 cellar: :any_skip_relocation, big_sur:       "fb3118b55ecf198907e43466587b28d328d2f41337f75701c4288ea72759ee7b"
+    sha256 cellar: :any_skip_relocation, catalina:      "c5f5828389cb7aad8fbc5ffb15dcd522f3e9f70718de08bbc5425f7c33118d56"
+    sha256 cellar: :any_skip_relocation, mojave:        "00e046ccd67253bfc0f9031fc7746ef03e4a66d0e1df2fa5aabc64e537863048"
   end
 
   depends_on "autoconf" => :build

@@ -2,10 +2,10 @@ class MinioMc < Formula
   desc "Replacement for ls, cp and other commands for object storage"
   homepage "https://github.com/minio/mc"
   url "https://github.com/minio/mc.git",
-      tag:      "RELEASE.2021-02-19T05-34-40Z",
-      revision: "b3c692d6eb496ee5719f279b96883aabd91e9213"
-  version "20210219053440"
-  license "Apache-2.0"
+      tag:      "RELEASE.2021-07-27T06-46-19Z",
+      revision: "addaf66de8af5d865a6102320727e8a5dbcacdb6"
+  version "20210727064619"
+  license "AGPL-3.0-or-later"
   head "https://github.com/minio/mc.git"
 
   livecheck do
@@ -17,15 +17,23 @@ class MinioMc < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4cafcc6a8dcfba05ebcb572ffebaddc477cb075db1259fedac5f2c03303fd7b6"
-    sha256 cellar: :any_skip_relocation, big_sur:       "b3b9bf30be936a05ea50fa04d06861cfc04bba6c3f6cfbb943958d9a1439aeae"
-    sha256 cellar: :any_skip_relocation, catalina:      "ec9831679aaf37e35a8429d692d7c16a82f94530ead2566615c0a8213bd3576d"
-    sha256 cellar: :any_skip_relocation, mojave:        "dfdc73bd87522f919bcd45b1dcda2b91541cda7ff5cb529c0e6643f98bb3ec89"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "2063b187b7dbb836f818fcec3a4639d4e64c96d9d1f6d939e506762f7d369250"
+    sha256 cellar: :any_skip_relocation, big_sur:       "a862123c9c605ffe1bdbd4b5b3c627f6f61383737ad72e9a2504a4800d4fe89f"
+    sha256 cellar: :any_skip_relocation, catalina:      "8675c966db80e5f3ea209ca100f24732df12bb5076c6aabb2231dd36b79f8154"
+    sha256 cellar: :any_skip_relocation, mojave:        "866b93e19bfe8a836d4c9af018977511cefd46cfbd463b9b30102b410a44589a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "ec747d29ca4c52766473c86db01955140754cb134d32a98407c04188369776f3"
   end
 
   depends_on "go" => :build
 
   conflicts_with "midnight-commander", because: "both install an `mc` binary"
+
+  # Support go 1.17, remove after next release
+  patch do
+    url "https://github.com/minio/mc/commit/855333e4ab24804dd3dcd38988ceaed112ee62f9.patch?full_index=1"
+    sha256 "c00d331fd8d420105356d004aeecd17ef4c6332796f53a3e547218b4de7dbd41"
+  end
 
   def install
     if build.head?

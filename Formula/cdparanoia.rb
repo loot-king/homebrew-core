@@ -2,7 +2,13 @@ class Cdparanoia < Formula
   desc "Audio extraction tool for sampling CDs"
   homepage "https://www.xiph.org/paranoia/"
   url "https://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-10.2.src.tgz"
+  mirror "https://ftp.osuosl.org/pub/xiph/releases/cdparanoia/cdparanoia-III-10.2.src.tgz"
   sha256 "005db45ef4ee017f5c32ec124f913a0546e77014266c6a1c50df902a55fe64df"
+
+  livecheck do
+    url "https://ftp.osuosl.org/pub/xiph/releases/cdparanoia/?C=M&O=D"
+    regex(/href=.*?cdparanoia-III[._-]v?(\d+(?:\.\d+)+)\.src\.t/i)
+  end
 
   bottle do
     sha256 cellar: :any, arm64_big_sur: "79d03f652937117697ae235b7bbb8558be9cb86edc42c330316204a288d5cb59"

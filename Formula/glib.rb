@@ -3,15 +3,16 @@ class Glib < Formula
 
   desc "Core application library for C"
   homepage "https://developer.gnome.org/glib/"
-  url "https://download.gnome.org/sources/glib/2.68/glib-2.68.1.tar.xz"
-  sha256 "241654b96bd36b88aaa12814efc4843b578e55d47440103727959ac346944333"
+  url "https://download.gnome.org/sources/glib/2.68/glib-2.68.4.tar.xz"
+  sha256 "62fd061d08a75492617e625a73e2c05e259f831acbb8e1f8b9c81f23f7993a3b"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 arm64_big_sur: "e3f0b329d96675cc9d34d1132a69fa941b93367d08361829892f477cb242dcc6"
-    sha256 big_sur:       "244628aa2804cc51993188636086a93d9f35574c31482baecc379a1584300b08"
-    sha256 catalina:      "7d39ec15cca95b968a0151898f31134edd12063e0219df4137a49bcc369cdd0d"
-    sha256 mojave:        "ebbfbbde6044f386f2494f2c99e5dad5ae9ebaa3fa0f103a56ac08a367d13fe6"
+    sha256 arm64_big_sur: "e21de4937ed890a80511c967b5b82a22b847aa088476bf4edd549d3128839184"
+    sha256 big_sur:       "ad356cbc8651147276eff312f762a05fabe846d598886858d4960e6935795823"
+    sha256 catalina:      "392a02c839b4b05e9575afb18c3357038d423a146a103e44fc09670168baaeed"
+    sha256 mojave:        "38232f3c93be6a25722c2124f9d7f80220c4ad80a76dc67691bdf4c8468f4ba4"
+    sha256 x86_64_linux:  "94f22db8b46fe2f0fd9177633702c104ff86b3f783c89847650d3ee94af732b8"
   end
 
   depends_on "meson" => :build

@@ -1,10 +1,10 @@
 class Root < Formula
   desc "Object oriented framework for large scale data analysis"
   homepage "https://root.cern.ch/"
-  url "https://root.cern.ch/download/root_v6.22.08.source.tar.gz"
-  sha256 "6f061ff6ef8f5ec218a12c4c9ea92665eea116b16e1cd4df4f96f00c078a2f6f"
+  url "https://root.cern.ch/download/root_v6.24.04.source.tar.gz"
+  sha256 "4a416f3d7aa25dba46d05b641505eb074c5f07b3ec1d21911451046adaea3ee7"
   license "LGPL-2.1-or-later"
-  head "https://github.com/root-project/root.git"
+  head "https://github.com/root-project/root.git", branch: "master"
 
   livecheck do
     url "https://root.cern.ch/download/"
@@ -12,10 +12,11 @@ class Root < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "6a4af2c361ac4f65f523b5487a93afe1ff7ea3939997bd376d6971a1de6dd1fb"
-    sha256 big_sur:       "6f3b9e7ce0cc079488e9e4b9d6ca8a0b948c0d605887ff95f40a881c0645a1b6"
-    sha256 catalina:      "7fdc50aa5b0b2889c0b93f77c8dad5b8f838b924663f4d5b38fe2f423ef6effd"
-    sha256 mojave:        "385d6278a1dd4c09fd1031b8c443e19b7ec4482ad85105c0d0f06bc6dea60229"
+    sha256 arm64_big_sur: "b047f553b56962b417f1a8deeb43c9a814de15e776aa52287e074e83fd9ea09d"
+    sha256 big_sur:       "1fa26f261a9a86327106fbb5f2dd48687efa39979c207696f85eb6d6a7814fef"
+    sha256 catalina:      "2c925c6cfea7e222a1aaec1c0bec0e74d6a6f56ca24afd0f36cf0b3ef97b01f6"
+    sha256 mojave:        "75c2a278276d76be14f0ed92a78e104a39cdcf0d7e506dda0d172b83747d7ed7"
+    sha256 x86_64_linux:  "91c253a9e56202f9469ae864ffaf053e5096cc6345ca09972a04757ab2f349f8"
   end
 
   depends_on "cmake" => :build
@@ -33,25 +34,24 @@ class Root < Formula
   depends_on "pcre"
   depends_on "python@3.9"
   depends_on "tbb"
+  depends_on :xcode if MacOS.version <= :catalina
   depends_on "xrootd"
   depends_on "xz" # for LZMA
   depends_on "zstd"
 
   uses_from_macos "libxml2"
 
+  on_linux do
+    depends_on "libxft"
+    depends_on "libxpm"
+  end
+
   conflicts_with "glew", because: "root ships its own copy of glew"
 
   skip_clean "bin"
 
-  # Can be removed post 6.22.08
-  patch do
-    url "https://github.com/root-project/root/commit/d113c9fcf7e1d88c573717c676aa4b97f1db2ea2.patch?full_index=1"
-    sha256 "6d0fd5ccd92fbb27a949ea40ed4fd60a5e112a418d124ca99f05f70c9df31cda"
-  end
-
   def install
-    # Work around "error: no member named 'signbit' in the global namespace"
-    ENV.delete("SDKROOT") if DevelopmentTools.clang_build_version >= 900
+    on_linux { ENV.append "LDFLAGS", "-Wl,-rpath,#{lib}/root" }
 
     # Freetype/afterimage/gl2ps/lz4 are vendored in the tarball, so are fine.
     # However, this is still permitting the build process to make remote
@@ -99,7 +99,6 @@ class Root < Formula
 
     mkdir "builddir" do
       system "cmake", "..", *args
-
       system "ninja", "install"
 
       chmod 0755, Dir[bin/"*.*sh"]
@@ -150,12 +149,10 @@ class Root < Formula
         return 0;
       }
     EOS
-    (testpath/"test_compile.bash").write <<~EOS
-      $(root-config --cxx) $(root-config --cflags) $(root-config --libs) $(root-config --ldflags) test.cpp
-      ./a.out
-    EOS
-    assert_equal "Hello, world!\n",
-                 shell_output("/bin/bash test_compile.bash")
+    flags = %w[cflags libs ldflags].map { |f| "$(root-config --#{f})" }
+    on_linux { flags << "-Wl,-rpath,#{lib}/root" }
+    shell_output("$(root-config --cxx) test.cpp #{flags.join(" ")}")
+    assert_equal "Hello, world!\n", shell_output("./a.out")
 
     # Test Python module
     system Formula["python@3.9"].opt_bin/"python3", "-c", "import ROOT; ROOT.gSystem.LoadAllLibraries()"

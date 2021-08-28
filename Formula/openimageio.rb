@@ -1,8 +1,8 @@
 class Openimageio < Formula
   desc "Library for reading, processing and writing images"
   homepage "https://openimageio.org/"
-  url "https://github.com/OpenImageIO/oiio/archive/Release-2.2.13.1.tar.gz"
-  sha256 "7f810124e866ac14ad9c11b0ab528a6ed4c8e62a190cc44a77eed8159f57405c"
+  url "https://github.com/OpenImageIO/oiio/archive/v2.2.17.0.tar.gz"
+  sha256 "b570da8928c3e8cde29bdb0e0320e727789e141c48375fb69a2548d642462396"
   license "BSD-3-Clause"
   head "https://github.com/OpenImageIO/oiio.git"
 
@@ -13,9 +13,11 @@ class Openimageio < Formula
   end
 
   bottle do
-    sha256 big_sur:  "f10b10d96c92d1e40e31579e4f1c5202924fc3e6bb4d3ebd2c802955fed38a29"
-    sha256 catalina: "8d51cd8c2797482fb1422219f2d358bc2db0c1c20460c09a5f9028248fe62acf"
-    sha256 mojave:   "fd7c09c1507afd7b579a6841333c873f281f1a388ab8c636079957d86c0266a8"
+    sha256 cellar: :any,                 arm64_big_sur: "5c28aef2cf25dbf3453719c4712f6783f49b2f2f0e9482cf8bd2b473ef3e34ac"
+    sha256 cellar: :any,                 big_sur:       "bbad204a431acf7b4dd8f8c9a4106f60aae429b449e5a5981931c4a31ed3f934"
+    sha256 cellar: :any,                 catalina:      "c348b0fc2f14951144df8eb71f98938f2754be9689023583b6cfe0e21776344f"
+    sha256 cellar: :any,                 mojave:        "e9a7385f856a14fbceb940cafee67b94c8c50d095f5507a86323eed978d888e3"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "86d2bf8a1f265632ef790898411d7add7f9c0753927b4a239fc1f0c5681e162d"
   end
 
   depends_on "cmake" => :build
@@ -25,7 +27,7 @@ class Openimageio < Formula
   depends_on "ffmpeg"
   depends_on "freetype"
   depends_on "giflib"
-  depends_on "ilmbase"
+  depends_on "imath"
   depends_on "jpeg"
   depends_on "libheif"
   depends_on "libpng"
@@ -51,7 +53,7 @@ class Openimageio < Formula
       -DUSE_QT=OFF
     ]
 
-    # CMake picks up the system's python dylib, even if we have a brewed one.
+    # CMake picks up the system's python shared library, even if we have a brewed one.
     py3ver = Language::Python.major_minor_version Formula["python@3.9"].opt_bin/"python3"
     py3prefix = Formula["python@3.9"].opt_frameworks/"Python.framework/Versions/#{py3ver}"
     on_linux do

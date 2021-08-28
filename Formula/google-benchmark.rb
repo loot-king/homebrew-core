@@ -1,17 +1,17 @@
 class GoogleBenchmark < Formula
   desc "C++ microbenchmark support library"
   homepage "https://github.com/google/benchmark"
-  url "https://github.com/google/benchmark/archive/v1.5.2.tar.gz"
-  sha256 "dccbdab796baa1043f04982147e67bb6e118fe610da2c65f88912d73987e700c"
+  url "https://github.com/google/benchmark/archive/v1.5.6.tar.gz"
+  sha256 "789f85b4810d13ff803834ea75999e41b326405d83d6a538baf01499eda96102"
   license "Apache-2.0"
   head "https://github.com/google/benchmark.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "b1be7c8171680b473a0b4175be006e5c524d76ed165305f347b3b7de8dd3846f"
-    sha256 cellar: :any_skip_relocation, big_sur:       "1d488749c931d730a0d074c01b288c579c89083c9f49760e8ce451acf84ea0c7"
-    sha256 cellar: :any_skip_relocation, catalina:      "432e4f98bad2a73d0f47279714d5028dfad2283f939eb745794b47272bf90f2e"
-    sha256 cellar: :any_skip_relocation, mojave:        "e303f9f7f9ce196aa338a18767605162d27612514cd134e7b143be0b85ffe66c"
-    sha256 cellar: :any_skip_relocation, high_sierra:   "8275a82eeb23188a166f67ace983ee9968f247840d20fb0119a5f1c0f5067c7a"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "e76e7e6cda7fab9b28f65027856bac7395a77aee553a24e930b2b64f0cb5e12d"
+    sha256 cellar: :any_skip_relocation, big_sur:       "d23a84b5b2c4e0f4d51bced0c90498f826fe3924c332c3b158848d87b94feb75"
+    sha256 cellar: :any_skip_relocation, catalina:      "709fe9fd9c19b733aa58a01b691bd50b4edf81f1d9f46013a81a28ceab70fb5d"
+    sha256 cellar: :any_skip_relocation, mojave:        "67dfea1fc615c0d07aeaa061c8e7b32a639ca37d2d30ff7a3fc94018de42207f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8b673de871f65915e9e6ec11d1b39e6466c2b8519006f163ac4b076a54ccff59"
   end
 
   depends_on "cmake" => :build
@@ -33,7 +33,7 @@ class GoogleBenchmark < Formula
       BENCHMARK(BM_StringCreation);
       BENCHMARK_MAIN();
     EOS
-    flags = ["-stdlib=libc++", "-I#{include}", "-L#{lib}", "-lbenchmark"] + ENV.cflags.to_s.split
+    flags = ["-I#{include}", "-L#{lib}", "-lbenchmark", "-pthread"] + ENV.cflags.to_s.split
     system ENV.cxx, "-o", "test", "test.cpp", *flags
     system "./test"
   end

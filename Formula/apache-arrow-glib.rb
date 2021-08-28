@@ -1,17 +1,22 @@
 class ApacheArrowGlib < Formula
   desc "GLib bindings for Apache Arrow"
   homepage "https://arrow.apache.org/"
-  url "https://www.apache.org/dyn/closer.lua?path=arrow/arrow-3.0.0/apache-arrow-3.0.0.tar.gz"
-  mirror "https://archive.apache.org/dist/arrow/arrow-3.0.0/apache-arrow-3.0.0.tar.gz"
-  sha256 "73c2cc3be537aa1f3fd9490cfec185714168c9bfd599d23e287ab0cc0558e27a"
+  url "https://www.apache.org/dyn/closer.lua?path=arrow/arrow-5.0.0/apache-arrow-5.0.0.tar.gz"
+  mirror "https://archive.apache.org/dist/arrow/arrow-5.0.0/apache-arrow-5.0.0.tar.gz"
+  sha256 "c3b4313eca594c20f761a836719721aaf0760001af896baec3ab64420ff9910a"
   license "Apache-2.0"
-  head "https://github.com/apache/arrow.git"
+  head "https://github.com/apache/arrow.git", branch: "master"
+
+  livecheck do
+    formula "apache-arrow"
+  end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "ba8da1e8724d7ea1c0928b4ce0243c86321b0abfe83e24260eb5f4a5e1a23964"
-    sha256 cellar: :any, big_sur:       "83d1cd2b7e609b2511190646ab24b91e791656515273588172ce240a1354608e"
-    sha256 cellar: :any, catalina:      "7f9bcc0ec7352d6d509232e4e8c84b7165366177ac855bc639247f67153bf2ce"
-    sha256 cellar: :any, mojave:        "409b2858623ac0a4bf06803c26113df6135991bf060a016b3f58dfe1badfa0e3"
+    sha256 cellar: :any, arm64_big_sur: "37c2b194b6c0648b40a2627dabdf9073ef280bcb85c3633a1b528636b00ef9e7"
+    sha256 cellar: :any, big_sur:       "feb4e5e5d8257e0ab042fe905f999ff425cf219641d64bb98e5b6f4226104436"
+    sha256 cellar: :any, catalina:      "5017136d50cb3b2159370f6c2f2d2824607504e6e7f317b5a7c55a7f02437884"
+    sha256 cellar: :any, mojave:        "40980b2ef3e926109475f08522df24aa409f7d40252738ee7f5d2fd32a8b0bd9"
+    sha256               x86_64_linux:  "00de00e057ffeafdc424efb6fb102fd233e349e589d1954fd347ae7e0f05157d"
   end
 
   depends_on "gobject-introspection" => :build

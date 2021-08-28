@@ -1,21 +1,22 @@
 class Xrootd < Formula
   desc "High performance, scalable, fault-tolerant access to data"
   homepage "https://xrootd.slac.stanford.edu/"
-  url "https://xrootd.slac.stanford.edu/download/v5.1.1/xrootd-5.1.1.tar.gz"
-  sha256 "b5fcaa21dad617bacf46deb56f1961d439505f13e41bf11f2d9a64fe3fb31800"
+  url "https://xrootd.slac.stanford.edu/download/v5.3.1/xrootd-5.3.1.tar.gz"
+  sha256 "7ea3a112ae9d8915eb3a06616141e5a0ee366ce9a5e4d92407b846b37704ee98"
   license "LGPL-3.0-or-later"
-  head "https://github.com/xrootd/xrootd.git"
+  head "https://github.com/xrootd/xrootd.git", branch: "master"
 
   livecheck do
-    url "http://xrootd.org/dload.html"
+    url "https://xrootd.slac.stanford.edu/dload.html"
     regex(/href=.*?xrootd[._-]v?(\d+(?:\.\d+)+)\.t/i)
   end
 
   bottle do
-    sha256 arm64_big_sur: "805f3c09b8a549c90bf143ab879a00a45566c199c9c9d90faff51b9ade6db21d"
-    sha256 big_sur:       "47e2ef9a7acfa8bafe7818a55c762d2bc3ca07303e61a2ac8924efcccdaa8ef6"
-    sha256 catalina:      "c8b0263052a469dac59ac2d35dc94c5ecb92daae1695af20aab120a79ce74c84"
-    sha256 mojave:        "4ca621cc2d357d7a31f03883687aa1b8a56f7b7111a616a5bb9747342982b0c5"
+    sha256 cellar: :any,                 arm64_big_sur: "362424b968ff53f18f064954e2c5ced9565d7c2401e86b921efd645e66bfe0c9"
+    sha256 cellar: :any,                 big_sur:       "c3a2b3d0e6078523c33a8256461615bde15c5444ce44da8ffba50ce6184db70e"
+    sha256 cellar: :any,                 catalina:      "60141a86efe1880508a94a9aa935d7eeea4708d710fb1d32c39b84b4a3cac779"
+    sha256 cellar: :any,                 mojave:        "402b1697b621101b2952acbbc9aae36d0b953b3a20acb1dbabc2ef9910e4734c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "8e05c2784cb3c302cdc0951d1755790cea3b63d3e05c78d3f672204a5f70b9e8"
   end
 
   depends_on "cmake" => :build
@@ -33,7 +34,7 @@ class Xrootd < Formula
     mkdir "build" do
       system "cmake", "..", *std_cmake_args,
                             "-DENABLE_PYTHON=OFF",
-                            "-DCMAKE_INSTALL_RPATH=#{opt_lib}"
+                            "-DCMAKE_INSTALL_RPATH=#{rpath}"
       system "make", "install"
     end
   end

@@ -3,7 +3,7 @@ class Pstoedit < Formula
   homepage "http://www.pstoedit.net/"
   url "https://downloads.sourceforge.net/project/pstoedit/pstoedit/3.75/pstoedit-3.75.tar.gz"
   sha256 "b7b5d8510b40a5b148f7751268712fcfd0c1ed2bb46f359f655b6fcdc53364cf"
-  license "GPL-2.0"
+  license "GPL-2.0-or-later"
 
   bottle do
     sha256 arm64_big_sur: "62d09abcd35a1d933545c501578d9583978eac45569bb7b3702f6fd1b5cbea9a"
@@ -11,6 +11,7 @@ class Pstoedit < Formula
     sha256 catalina:      "f048d902c088f0625c0c9e18d84b159493775b40e742812b040e7b517900260a"
     sha256 mojave:        "1f3ec91e58d95e08081694b43e031ed83f13a73cecff15c55c532268282b0ad1"
     sha256 high_sierra:   "22710dd8997d40cec3492c40960a9966b80b386bdbd3fed46515c66bb25053d7"
+    sha256 x86_64_linux:  "ffd83f20edd888753d7c981c90ebfd5d590078e93551c44d4ead593fe1b37371"
   end
 
   depends_on "pkg-config" => :build
@@ -19,16 +20,14 @@ class Pstoedit < Formula
   depends_on "plotutils"
 
   on_linux do
-    depends_on "gcc" => :build
+    depends_on "gcc"
   end
 
   # "You need a C++ compiler, e.g., g++ (newer than 6.0) to compile pstoedit."
   fails_with gcc: "5"
-  fails_with gcc: "6"
 
   def install
-    ENV.cxx11
-
+    on_macos { ENV.cxx11 }
     system "./configure", "--disable-dependency-tracking", "--prefix=#{prefix}"
     system "make", "install"
   end

@@ -3,22 +3,40 @@ require "language/node"
 class Apidoc < Formula
   desc "RESTful web API Documentation Generator"
   homepage "https://apidocjs.com"
-  url "https://github.com/apidoc/apidoc/archive/0.27.0.tar.gz"
-  sha256 "453772859c2d602ac98721e0038f4d9cd2b5f8bf08963362cd3db47b455b099a"
+  url "https://github.com/apidoc/apidoc/archive/0.29.0.tar.gz"
+  sha256 "e8dafeefbdc1699ccd65566f0d353c610f9847fbfd49483c1d4e6ed154a8c273"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "9d6ae6f0262f5df5f28ae6b55c3cb615bc2d0732386dd8e19d4ab1e30dc1d4a0"
-    sha256 cellar: :any_skip_relocation, big_sur:       "8b580c0df31070ab338c4a1ffd1c4486b2dec8467ff32f92f45a05e0b0dfc92f"
-    sha256 cellar: :any_skip_relocation, catalina:      "946e1d2e35f9855aaa1e56ff0f2ef04c65d2fed42179c045a1304912033cb4d5"
-    sha256 cellar: :any_skip_relocation, mojave:        "82602211849f5a90f78d43fd6ab0d1878bcc41579f74ed7aaa03ba47a567bfb9"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "69d9f81dc0cf0416ae6fef93b09ccb994e57d47046dd6c21eb610daae87ca1fe"
+    sha256 cellar: :any_skip_relocation, big_sur:       "209889e11d2641e73152d2c67acae004e396ad1047c2c16ab751ba709ef460ca"
+    sha256 cellar: :any_skip_relocation, catalina:      "209889e11d2641e73152d2c67acae004e396ad1047c2c16ab751ba709ef460ca"
+    sha256 cellar: :any_skip_relocation, mojave:        "209889e11d2641e73152d2c67acae004e396ad1047c2c16ab751ba709ef460ca"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "55e98638e7ac48270c94b3e5bd063b83007ab8f51c8533a03c59fcd52fd21e19"
   end
 
   depends_on "node"
 
+  on_macos do
+    depends_on "macos-term-size"
+  end
+
   def install
     system "npm", "install", *Language::Node.std_npm_install_args(libexec)
     bin.install_symlink Dir["#{libexec}/bin/*"]
+
+    term_size_vendor_dir = libexec/"lib/node_modules"/name/"node_modules/term-size/vendor"
+    term_size_vendor_dir.rmtree # remove pre-built binaries
+
+    on_macos do
+      macos_dir = term_size_vendor_dir/"macos"
+      macos_dir.mkpath
+      # Replace the vendored pre-built term-size with one we build ourselves
+      ln_sf (Formula["macos-term-size"].opt_bin/"term-size").relative_path_from(macos_dir), macos_dir
+    end
+
+    # Extract native slices from universal binaries
+    deuniversalize_machos
   end
 
   test do

@@ -1,16 +1,15 @@
 class GrpcSwift < Formula
   desc "Swift language implementation of gRPC"
   homepage "https://github.com/grpc/grpc-swift"
-  url "https://github.com/grpc/grpc-swift/archive/1.0.0.tar.gz"
-  sha256 "5e0258437538bdfa26ca0e023649d97baa138d91881b949b2b344ef84cc2082a"
+  url "https://github.com/grpc/grpc-swift/archive/1.3.0.tar.gz"
+  sha256 "9d944cb397dfe88cb372c0c4d5095d6eba7f107bdcc3e373ac53b92032e48ac0"
   license "Apache-2.0"
-  revision 1
   head "https://github.com/grpc/grpc-swift.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4aec72603988813a29c088629f28cf91d4d9f09431905b59982d07da34a994e4"
-    sha256 cellar: :any_skip_relocation, big_sur:       "fa1bbadcaaf9feafa4277450a3bce9e299ff8c92bb4ef7a94c8d247e6a35da6c"
-    sha256 cellar: :any_skip_relocation, catalina:      "2e5d7811571ca3744cf8caeb836cf37ae1c802d7aff3a96c1126db1513df0c57"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "ba2ea3cb5eac186c74dc2c3cb52a4778d8165d0722f9255db46652a3d4bf68d1"
+    sha256 cellar: :any_skip_relocation, big_sur:       "d07dc821fe534041914a14be3ff9d64ccfcc20cdd01f50e60b7b9512104b0689"
+    sha256 cellar: :any_skip_relocation, catalina:      "f5bfa9de8d2b0ad1cc7fa93dfdb6a6ea7a08960d2c7f7dd221e0d3f1ff3bcb4b"
   end
 
   depends_on xcode: ["12.0", :build]

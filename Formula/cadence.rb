@@ -1,10 +1,10 @@
 class Cadence < Formula
   desc "Resource-oriented smart contract programming language"
   homepage "https://github.com/onflow/cadence"
-  url "https://github.com/onflow/cadence/archive/v0.15.1.tar.gz"
-  sha256 "f9dfc967b9184e57ed68125f0e8e8d7021308916f391977a13e3e8ebe3e6aeda"
+  url "https://github.com/onflow/cadence/archive/v0.18.0.tar.gz"
+  sha256 "6739b8b79367847885a0ab0e51f3ee5b2018cbd270fe494fe9b2368acfbbf223"
   license "Apache-2.0"
-  head "https://github.com/onflow/cadence.git"
+  head "https://github.com/onflow/cadence.git", branch: "master"
 
   livecheck do
     url :stable
@@ -12,10 +12,11 @@ class Cadence < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "4e9a5ec79e2f665284c51e4b8aa726028e218c852ea37954535a59f4d0147003"
-    sha256 cellar: :any_skip_relocation, big_sur:       "abd65a00f45202ce36b85bc49bad645a449be1758f4f848544694776884140fe"
-    sha256 cellar: :any_skip_relocation, catalina:      "9fc31cfb6e9cbeefc41dfbc0b8dba766865d287ffe18d53ce3ed6e468b27c8b3"
-    sha256 cellar: :any_skip_relocation, mojave:        "b96d6c1c283ad4b084364d60a6f10f8e7bfbba227e2e61b824fe145cb89b2095"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "d9d20ce98ce3e604d28d8f4ab17668d69a0b77781c7bdfdd23d924dd5a938935"
+    sha256 cellar: :any_skip_relocation, big_sur:       "6b1470f32ce2aabd4f241e28f815a76b6d9e662a36c056f85f1abf88108457f7"
+    sha256 cellar: :any_skip_relocation, catalina:      "f787493145faa01f69bed57e96aa09bd635e5684e98c48a3322fb2b45b636b64"
+    sha256 cellar: :any_skip_relocation, mojave:        "c323a5694543510c0c9b7b5915f126460dc54c2d26b5701c8c9b90ba65de60ca"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "d98ab3b3e1f9fbc6535bbaec9db2789772e79cf19019c150b889f16a5682563a"
   end
 
   depends_on "go" => :build

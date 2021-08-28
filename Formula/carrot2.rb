@@ -2,24 +2,26 @@ class Carrot2 < Formula
   desc "Search results clustering engine"
   homepage "https://project.carrot2.org"
   url "https://github.com/carrot2/carrot2.git",
-      tag:      "release/4.2.1",
-      revision: "936bcf7fa48e03fafffdf4e6f15b36074d161e6e"
+      tag:      "release/4.3.1",
+      revision: "5ee1bc852738bce97fe8be355720f5809fb4cdec"
   license "Apache-2.0"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "ddaaa474a26c2928e2a080b41ba93aec4c525e400d81315c4f96ad5eba491863"
-    sha256 cellar: :any_skip_relocation, catalina: "30958bc92829b4baadc8bca3164ea20b2bba51c9c2ff96a55f29edccd27f3fbd"
-    sha256 cellar: :any_skip_relocation, mojave:   "dd82165536db4f4a723d1789f376dca7c1a617fc1ee402818e991ff8734c39d5"
+    sha256 cellar: :any_skip_relocation, big_sur:      "46ec4d892dbe4c93519d0ab6c0dcb567398982bfd8e211985a9a4938351cb40d"
+    sha256 cellar: :any_skip_relocation, catalina:     "86d5724dded84fadd2e522cf97350500cbd9f2af46fd59735cb001a69187041d"
+    sha256 cellar: :any_skip_relocation, mojave:       "52a22394905c670f35257fd4c428fc1c5919957d8ab5642d8ee068286ca6703c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "66b3d79a8e8e5ef99f385a2b22c392a240cc3be1475d136eca377c4bf802c499"
   end
 
-  depends_on "gradle" => :build
-  depends_on "openjdk"
+  # Switch to `gradle` when carrot2 supports Gradle 7+
+  depends_on "gradle@6" => :build
+  depends_on "openjdk@11"
 
   def install
     # Make possible to build the formula with the latest available in Homebrew gradle
     inreplace "gradle/validation/check-environment.gradle",
       /expectedGradleVersion = '[^']+'/,
-      "expectedGradleVersion = '#{Formula["gradle"].version}'"
+      "expectedGradleVersion = '#{Formula["gradle@6"].version}'"
 
     system "gradle", "assemble", "--no-daemon"
 
@@ -29,7 +31,7 @@ class Carrot2 < Formula
     end
 
     (bin/"carrot2").write_env_script "#{libexec}/dcs/dcs",
-      JAVA_CMD:    "exec '#{Formula["openjdk"].opt_bin}/java'",
+      JAVA_CMD:    "exec '#{Formula["openjdk@11"].opt_bin}/java'",
       SCRIPT_HOME: libexec/"dcs"
   end
 
@@ -62,7 +64,7 @@ class Carrot2 < Formula
   test do
     port = free_port
     fork { exec bin/"carrot2", "--port", port.to_s }
-    sleep 5
+    sleep 20
     assert_match "Lingo", shell_output("curl -s localhost:#{port}/service/list")
   end
 end

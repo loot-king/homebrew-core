@@ -1,10 +1,10 @@
 class MingwW64 < Formula
   desc "Minimalist GNU for Windows and GCC cross-compilers"
   homepage "https://sourceforge.net/projects/mingw-w64/"
-  url "https://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v8.0.0.tar.bz2"
-  sha256 "44c740ea6ab3924bc3aa169bad11ad3c5766c5c8459e3126d44eabb8735a5762"
+  url "https://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v9.0.0.tar.bz2"
+  sha256 "1929b94b402f5ff4d7d37a9fe88daa9cc55515a6134805c104d1794ae22a4181"
   license "ZPL-2.1"
-  revision 4
+  revision 2
 
   livecheck do
     url :stable
@@ -12,9 +12,11 @@ class MingwW64 < Formula
   end
 
   bottle do
-    sha256 big_sur:  "8c3cd715317e77d6a0d08533c8ff5d52a1579167df4135e4d2e9454b50ebc60a"
-    sha256 catalina: "fbc6d694298b4605a1cee8cda91d7ab5aaec320e8032881138fd710d2a21e3c8"
-    sha256 mojave:   "c3a059d85c9aacc3ae3c4f2a72e7d13f3361eaaf342cae7203bb907c66e72fc5"
+    sha256 arm64_big_sur: "6a226bcd216aa4689fb1426c3459caeaa7ee6a2403276c124956f222e9bdc6c9"
+    sha256 big_sur:       "0a48943bac581260148704b796a27aafc21d7650a0dd7b60c9d64dbec148be93"
+    sha256 catalina:      "780144a43e99c22058a07d76668e83107a2bb5e89b651d694c1756174ca65ca3"
+    sha256 mojave:        "55243318eb8179bb7f962c83cb0a35a03fa728e9e444848f4948e82f4e0039c8"
+    sha256 x86_64_linux:  "0976e76105c70de683c1f4f2283248bf70521858d3bd91737e0e6bd01099af17"
   end
 
   # Apple's makeinfo is old and has bugs
@@ -26,15 +28,24 @@ class MingwW64 < Formula
   depends_on "mpfr"
 
   resource "binutils" do
-    url "https://ftp.gnu.org/gnu/binutils/binutils-2.36.1.tar.xz"
-    mirror "https://ftpmirror.gnu.org/binutils/binutils-2.36.1.tar.xz"
-    sha256 "e81d9edf373f193af428a0f256674aea62a9d74dfe93f65192d4eae030b0f3b0"
+    url "https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz"
+    mirror "https://ftpmirror.gnu.org/binutils/binutils-2.37.tar.xz"
+    sha256 "820d9724f020a3e69cb337893a0b63c2db161dadcb0e06fc11dc29eb1e84a32c"
   end
 
   resource "gcc" do
-    url "https://ftp.gnu.org/gnu/gcc/gcc-10.3.0/gcc-10.3.0.tar.xz"
-    mirror "https://ftpmirror.gnu.org/gcc/gcc-10.3.0/gcc-10.3.0.tar.xz"
-    sha256 "64f404c1a650f27fc33da242e1f2df54952e3963a49e06e73f6940f3223ac344"
+    url "https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"
+    mirror "https://ftpmirror.gnu.org/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz"
+    sha256 "d08edc536b54c372a1010ff6619dd274c0f1603aa49212ba20f7aa2cda36fa8b"
+
+    # Remove when upstream has Apple Silicon support
+    if Hardware::CPU.arm?
+      patch do
+        # patch from gcc-11.1.0-arm branch
+        url "https://github.com/fxcoudert/gcc/commit/eea3046c5fa62d4dee47e074c7a758570d9da61c.patch?full_index=1"
+        sha256 "b55ca05a0ed32f69f63bbe708568df5ad62d938da0e34b515d601bb966d32d40"
+      end
+    end
   end
 
   def target_archs
@@ -119,8 +130,15 @@ class MingwW64 < Formula
 
       mkdir "mingw-w64-crt/build-#{arch}" do
         system "../configure", *args
-        system "make"
-        system "make", "install"
+        # Resolves "Too many open files in system"
+        # bfd_open failed open stub file dfxvs01181.o: Too many open files in system
+        # bfd_open failed open stub file: dvxvs00563.o: Too many open files in systembfd_open
+        # https://sourceware.org/bugzilla/show_bug.cgi?id=24723
+        # https://sourceware.org/bugzilla/show_bug.cgi?id=23573#c18
+        ENV.deparallelize do
+          system "make"
+          system "make", "install"
+        end
       end
 
       # Build the winpthreads library
@@ -136,6 +154,18 @@ class MingwW64 < Formula
         --prefix=#{arch_dir}/#{target}
       ]
       mkdir "mingw-w64-libraries/winpthreads/build-#{arch}" do
+        system "../configure", *args
+        system "make"
+        system "make", "install"
+      end
+
+      args = %W[
+        --host=#{target}
+        --with-sysroot=#{arch_dir}/#{target}
+        --prefix=#{arch_dir}
+        --program-prefix=#{target}-
+      ]
+      mkdir "mingw-w64-tools/widl/build-#{arch}" do
         system "../configure", *args
         system "make"
         system "make", "install"
@@ -167,6 +197,22 @@ class MingwW64 < Formula
     (testpath/"hello.f90").write <<~EOS
       program hello ; print *, "Hello, world!" ; end program hello
     EOS
+    # https://docs.microsoft.com/en-us/windows/win32/rpc/using-midl
+    (testpath/"example.idl").write <<~EOS
+      [
+        uuid(ba209999-0c6c-11d2-97cf-00c04f8eea45),
+        version(1.0)
+      ]
+      interface MyInterface
+      {
+        const unsigned short INT_ARRAY_LEN = 100;
+
+        void MyRemoteProc(
+            [in] int param1,
+            [out] int outArray[INT_ARRAY_LEN]
+        );
+      }
+    EOS
 
     ENV["LC_ALL"] = "C"
     on_macos do
@@ -184,6 +230,9 @@ class MingwW64 < Formula
 
       system "#{bin}/#{target}-gfortran", "-o", "test.exe", "hello.f90"
       assert_match "file format pei-#{outarch}", shell_output("#{bin}/#{target}-objdump -a test.exe")
+
+      system "#{bin}/#{target}-widl", "example.idl"
+      assert_predicate testpath/"example_s.c", :exist?, "example_s.c should have been created"
     end
   end
 end

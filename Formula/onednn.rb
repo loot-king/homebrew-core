@@ -1,16 +1,17 @@
 class Onednn < Formula
   desc "Basic building blocks for deep learning applications"
   homepage "https://01.org/oneDNN"
-  url "https://github.com/oneapi-src/oneDNN/archive/refs/tags/v2.2.1.tar.gz"
-  sha256 "3faf3b7811dd37835169a9d5c57f17fd591f062029851186f9b11db117b9d1d9"
+  url "https://github.com/oneapi-src/oneDNN/archive/v2.3.2.tar.gz"
+  sha256 "8cbade2dd955bc8f281d31a2e89e7ad7b11d73cd8281c30a64b2ff8e3a63f07e"
   license "Apache-2.0"
   head "https://github.com/oneapi-src/onednn.git"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "2f09616428ff73e7dea6affce58ea389735b2277dd03e18ab5dbfe23f3c9f982"
-    sha256 cellar: :any, big_sur:       "d7b6e3a859de08e2b1e81a2ff7381c16a620efe176a1e09082418d8613ad72e7"
-    sha256 cellar: :any, catalina:      "a0d2c430a79bda2037b5460b6835a6cf63448981947ed418a7610295042421cd"
-    sha256 cellar: :any, mojave:        "f37184d40252b9e19dd884ef0be09f7c9e86fbef469e5b28dd5b87bd29479732"
+    sha256 cellar: :any,                 arm64_big_sur: "b689877ed49e48e5ad7d10c3f7b6175f3e934b8762eaefa833a3a188cfc0905d"
+    sha256 cellar: :any,                 big_sur:       "54de4099e0e24c93e94437c1a3cea1844d5bc0f1a6dc50f75e8f2fcd020e9eac"
+    sha256 cellar: :any,                 catalina:      "3f0e47b458db78e9294e5970f6d7eb023cc9abef4fc03efecbaab5c62f41f80d"
+    sha256 cellar: :any,                 mojave:        "8beb08cae2c9e6161b8036e55e8cb4ba286aac5733d9dfe6ff9a2248c955ee9c"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1b6e31c3b47539ccc243a29881134ae1756df7b906c32cb897c5a9a9aae26e7a"
   end
 
   depends_on "cmake" => :build

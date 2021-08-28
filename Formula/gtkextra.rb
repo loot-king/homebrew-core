@@ -3,13 +3,15 @@ class Gtkextra < Formula
   homepage "https://gtkextra.sourceforge.io/"
   url "https://downloads.sourceforge.net/project/gtkextra/3.3/gtkextra-3.3.4.tar.gz"
   sha256 "651b738a78edbd5d6ccb64f5a256c39ec35fbbed898e54a3ab7e6cf8fd82f1d6"
+  license "GPL-2.0-or-later"
   revision 3
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "841d46dfdaee00be8a853e8069db2b8ca1fbbfcaf298360411b6f9c0a0706da6"
-    sha256 cellar: :any, big_sur:       "3c35df2372587b0cc5bde265a9ff06774ec70651ac5aa103639dc41e669ae3b7"
-    sha256 cellar: :any, catalina:      "17ba389425eea1e26e308f07b94a3f8637645e83a7b8314681f2285e09996d9b"
-    sha256 cellar: :any, mojave:        "d154740567dfe6c084d3ba87d2afb32e9be63b370f85828e01cd5a3ec164d18f"
+    sha256 cellar: :any,                 arm64_big_sur: "841d46dfdaee00be8a853e8069db2b8ca1fbbfcaf298360411b6f9c0a0706da6"
+    sha256 cellar: :any,                 big_sur:       "3c35df2372587b0cc5bde265a9ff06774ec70651ac5aa103639dc41e669ae3b7"
+    sha256 cellar: :any,                 catalina:      "17ba389425eea1e26e308f07b94a3f8637645e83a7b8314681f2285e09996d9b"
+    sha256 cellar: :any,                 mojave:        "d154740567dfe6c084d3ba87d2afb32e9be63b370f85828e01cd5a3ec164d18f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "63ff3052d9c03812e4c97cf79786a4395b9cf431588fc7f771331d049bbe6127"
   end
 
   depends_on "pkg-config" => :build
@@ -45,6 +47,12 @@ class Gtkextra < Formula
     libpng = Formula["libpng"]
     pango = Formula["pango"]
     pixman = Formula["pixman"]
+
+    backend = "quartz"
+    on_linux do
+      backend = "x11"
+    end
+
     flags = %W[
       -I#{atk.opt_include}/atk-1.0
       -I#{cairo.opt_include}/cairo
@@ -72,13 +80,13 @@ class Gtkextra < Formula
       -L#{pango.opt_lib}
       -latk-1.0
       -lcairo
-      -lgdk-quartz-2.0
+      -lgdk-#{backend}-2.0
       -lgdk_pixbuf-2.0
       -lgio-2.0
       -lglib-2.0
       -lgobject-2.0
-      -lgtk-quartz-2.0
-      -lgtkextra-quartz-3.0
+      -lgtk-#{backend}-2.0
+      -lgtkextra-#{backend}-3.0
       -lpango-1.0
       -lpangocairo-1.0
     ]

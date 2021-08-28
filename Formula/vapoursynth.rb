@@ -1,10 +1,10 @@
 class Vapoursynth < Formula
   desc "Video processing framework with simplicity in mind"
   homepage "http://www.vapoursynth.com"
-  url "https://github.com/vapoursynth/vapoursynth/archive/R52.tar.gz"
-  sha256 "4d5dc7950f4357da695d29708bc98013bc3e0bd72fc5d697f8c91ce3c4a4b2ac"
+  url "https://github.com/vapoursynth/vapoursynth/archive/R54.tar.gz"
+  sha256 "ad0c446adcb3877c253dc8c1372a053ad35022bcf42600889b927d2797c5330b"
   license "LGPL-2.1-or-later"
-  head "https://github.com/vapoursynth/vapoursynth.git"
+  head "https://github.com/vapoursynth/vapoursynth.git", branch: "master"
 
   livecheck do
     url :stable
@@ -12,10 +12,11 @@ class Vapoursynth < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "b3c19ccf1ca5ced181f926a8bf4216161e1768d32206a1a37d9622429d58c1a1"
-    sha256 cellar: :any, big_sur:       "3c71ee0d92d3187ddab6500dac2a36597268efa50cee90c854ffb69d75d5e6e7"
-    sha256 cellar: :any, catalina:      "4e4668fb68c7df01857472c070dfcf562fd392c48200204f637856a1368181b8"
-    sha256 cellar: :any, mojave:        "3d1e521272e5b5cff323d6678ff56f959945b9756f938c5ad46a797a345959c1"
+    sha256 cellar: :any,                 arm64_big_sur: "a346ffbc942c5d1fe4e10aad19fc48cffd3970def632f39fafee5be53236331c"
+    sha256 cellar: :any,                 big_sur:       "4c69d45c71838171fba6d4c2e9a95eff286767266d41f836459c9c5fd5ecc1b4"
+    sha256 cellar: :any,                 catalina:      "39aa1f2a6b6d761deeda877ebc140b4f71036ba1b6e59e4a891ac6b9b035fb51"
+    sha256 cellar: :any,                 mojave:        "231df154fd7cb7d282ba9ac35e15e15f1045d290e0791cd11023735534d5052f"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "2ff863d1d5ac1684c53467d1360fdc330f22bdecc48ac43992ef7f59e040f3bb"
   end
 
   depends_on "autoconf" => :build
@@ -34,7 +35,9 @@ class Vapoursynth < Formula
                           "--disable-silent-rules",
                           "--disable-dependency-tracking",
                           "--with-cython=#{Formula["cython"].bin}/cython",
-                          "--with-plugindir=#{HOMEBREW_PREFIX}/lib/vapoursynth"
+                          "--with-plugindir=#{HOMEBREW_PREFIX}/lib/vapoursynth",
+                          "--with-python_prefix=#{prefix}",
+                          "--with-python_exec_prefix=#{prefix}"
     system "make", "install"
     %w[eedi3 miscfilters morpho removegrain vinverse vivtc].each do |filter|
       rm prefix/"vapoursynth/lib#{filter}.la"

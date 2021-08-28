@@ -3,14 +3,15 @@ class Sparse < Formula
   homepage "https://sparse.wiki.kernel.org/"
   url "https://www.kernel.org/pub/software/devel/sparse/dist/sparse-0.6.3.tar.xz"
   sha256 "d4f6dbad8409e8e20a19f164b2c16f1edf76438ff77cf291935fde081b61a899"
-  head "https://git.kernel.org/pub/scm/devel/sparse/sparse.git"
+  head "https://git.kernel.org/pub/scm/devel/sparse/sparse.git", branch: "master"
 
   bottle do
-    sha256 arm64_big_sur: "7ba6578a0d29486b5839541706bcf448dd2babb0a1132c2956e2ce92ba3f0657"
-    sha256 big_sur:       "da170eea78ffe877b82b853f04ed4bd7487029c288c482f13cf798b70a1560c0"
-    sha256 catalina:      "1fb15ba5444a7c67d9f45215fc02e948583c28d8078546b3e0f766df50a1a859"
-    sha256 mojave:        "ac0ade8d4c0f98cadcca728fdd3c0694e3d3a4432c57edf0725542a91d750128"
-    sha256 high_sierra:   "7dcabb27270d98a6ad13d6b2c6b8c1bf3f0a9fa001a9737db841f1cd604dbeec"
+    sha256                               arm64_big_sur: "7ba6578a0d29486b5839541706bcf448dd2babb0a1132c2956e2ce92ba3f0657"
+    sha256                               big_sur:       "da170eea78ffe877b82b853f04ed4bd7487029c288c482f13cf798b70a1560c0"
+    sha256                               catalina:      "1fb15ba5444a7c67d9f45215fc02e948583c28d8078546b3e0f766df50a1a859"
+    sha256                               mojave:        "ac0ade8d4c0f98cadcca728fdd3c0694e3d3a4432c57edf0725542a91d750128"
+    sha256                               high_sierra:   "7dcabb27270d98a6ad13d6b2c6b8c1bf3f0a9fa001a9737db841f1cd604dbeec"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "fb32b4bafbf60ea280ea724a623376d9c74e36cd546f39d59318a23ab4ede874"
   end
 
   depends_on "gcc" if DevelopmentTools.clang_build_version < 1100

@@ -2,16 +2,17 @@ class Zeek < Formula
   desc "Network security monitor"
   homepage "https://www.zeek.org"
   url "https://github.com/zeek/zeek.git",
-      tag:      "v4.0.1",
-      revision: "54e03d7f0e06e40f3064107debf64769a6bd5216"
+      tag:      "v4.1.0",
+      revision: "73783cc8a62017835208b54753dd69ea5667ef2f"
   license "BSD-3-Clause"
-  head "https://github.com/zeek/zeek.git"
+  head "https://github.com/zeek/zeek.git", branch: "master"
 
   bottle do
-    sha256 arm64_big_sur: "90b0127aa4f76de5d9b892496e7e133fb155b9701dbfaa329a83b4f1381364a5"
-    sha256 big_sur:       "b42c2af18a8fecf4d0c15313864e30e8718c507f4012a811d02695eaf0710650"
-    sha256 catalina:      "c2a598db6bc6144d143efc7c8f5d9bce480f87a98cd97818b191952a770baad2"
-    sha256 mojave:        "1e7588e78c991e402020a8060f603be317e55e04fa6c3348cd0eec17189f72ff"
+    sha256 arm64_big_sur: "7e26e7bef14bbfb5a198f618b53c9985c2f3f9059fd367238bc69f5dabf8e880"
+    sha256 big_sur:       "f495915276550ecc000d756466c923f9b59714e71b2ba27eed56c6918985f558"
+    sha256 catalina:      "964022f5acec17e81d4ccac974a01bb07c5623af24046a15a11fcb696b6d9bbc"
+    sha256 mojave:        "0d21a26a3785f6d3b34cefbf57273251a442d2ad2c53a1d0672ffdbe0d39404a"
+    sha256 x86_64_linux:  "2744c426f2b90b03919aa1b112ec19bcf0d30ebfe32f2ac1a813bc5af19db455"
   end
 
   depends_on "bison" => :build
@@ -28,17 +29,18 @@ class Zeek < Formula
   uses_from_macos "libpcap"
   uses_from_macos "zlib"
 
-  resource "pcap-test" do
-    url "https://raw.githubusercontent.com/zeek/zeek/59ed5c75f190d4401d30172b9297b3592dd72acf/testing/btest/Traces/http/get.trace"
-    sha256 "48c8c3a3560a13ffb03d4eb0ed14143fb57350ced7d6874761a963a8091b1866"
+  on_linux do
+    depends_on "gcc" # For C++17
   end
+
+  fails_with gcc: "5"
 
   def install
     # Remove SDK paths from zeek-config. This breaks usage with other SDKs.
     # https://github.com/corelight/zeek-community-id/issues/15
     inreplace "zeek-config.in" do |s|
-      s.gsub! ":@ZEEK_CONFIG_PCAP_INCLUDE_DIR@", ""
-      s.gsub! ":@ZEEK_CONFIG_ZLIB_INCLUDE_DIR@", ""
+      s.gsub! "@ZEEK_CONFIG_PCAP_INCLUDE_DIR@", ""
+      s.gsub! "@ZEEK_CONFIG_ZLIB_INCLUDE_DIR@", ""
     end
 
     mkdir "build" do
@@ -59,8 +61,11 @@ class Zeek < Formula
   test do
     assert_match "version #{version}", shell_output("#{bin}/zeek --version")
     assert_match "ARP packet analyzer", shell_output("#{bin}/zeek --print-plugins")
-    resource("pcap-test").stage testpath
-    assert shell_output("#{bin}/zeek -C -r get.trace && test -s conn.log && test -s http.log")
+    system bin/"zeek", "-C", "-r", test_fixtures("test.pcap")
+    assert_predicate testpath/"conn.log", :exist?
+    refute_predicate testpath/"conn.log", :empty?
+    assert_predicate testpath/"http.log", :exist?
+    refute_predicate testpath/"http.log", :empty?
     # For bottling MacOS SDK paths must not be part of the public include directories, see zeek/zeek#1468.
     refute_includes shell_output("#{bin}/zeek-config --include_dir").chomp, "MacOSX"
   end

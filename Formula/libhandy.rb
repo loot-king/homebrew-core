@@ -1,15 +1,16 @@
 class Libhandy < Formula
   desc "Building blocks for modern adaptive GNOME apps"
   homepage "https://gitlab.gnome.org/GNOME/libhandy"
-  url "https://gitlab.gnome.org/GNOME/libhandy/-/archive/1.2.1/libhandy-1.2.1.tar.gz"
-  sha256 "90cee074048310926a1c66278fa10043a220953cc6be03f9f5eb756b6bcd1043"
+  url "https://gitlab.gnome.org/GNOME/libhandy/-/archive/1.2.3/libhandy-1.2.3.tar.gz"
+  sha256 "b20cbef65cef2e039b9b9d504c2245435998555cf5ada126dee49c2b89d9eda5"
   license "LGPL-2.1-or-later"
 
   bottle do
-    sha256 arm64_big_sur: "dd4385ff55eaa5a8b512314e0a31e1172bfdaa7b9614a64655a8de03fce7b0a0"
-    sha256 big_sur:       "cce5ed26f5f2a34ef5b6c04e180f8405d40f3004456323c0e662060e93925a53"
-    sha256 catalina:      "a94d7f827adf5af00990511f95b9997c40dbfadf1e11b1d38f82159b2a1373f2"
-    sha256 mojave:        "2e42e381790cd71abd83024191ce49b634aed547cd482e3efe711792661c8e15"
+    sha256 arm64_big_sur: "5d2dbb845cf88133e1ef430f457127b4101534612a8b80b8830dea4e29432439"
+    sha256 big_sur:       "a6aa6e6042f4be52b6771e90ca9a35f4792bc8ae3cf0e2a641285ea7c7b6b35b"
+    sha256 catalina:      "094c9ab75ad36b5ea16fddebf1280cd7a2a70ffd513a98ba80cae27d540a9d36"
+    sha256 mojave:        "e23bf85ef855b2fa9bde7dabc8ef4ae651f0c1d3157ee5578b46a319c9910d47"
+    sha256 x86_64_linux:  "62d3bc37a45613506fcb1d93491423a0de7697603815dafc1931c7ef56c0d676"
   end
 
   # NOTE: The glade catalog is disabled due to a bug that has been fixed but
@@ -89,13 +90,18 @@ class Libhandy < Formula
       -lgio-2.0
       -lglib-2.0
       -lgobject-2.0
-      -lgtk-3.0
+      -lgtk-3
       -lhandy-1
-      -lintl
       -lpango-1.0
       -lpangocairo-1.0
     ]
+    on_macos do
+      flags << "-lintl"
+    end
     system ENV.cc, "test.c", "-o", "test", *flags
-    system "./test"
+    # Don't have X/Wayland in Docker
+    on_macos do
+      system "./test"
+    end
   end
 end

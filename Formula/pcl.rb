@@ -1,28 +1,16 @@
 class Pcl < Formula
   desc "Library for 2D/3D image and point cloud processing"
   homepage "https://pointclouds.org/"
+  url "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.12.0.tar.gz"
+  sha256 "21dfa9a268de9675c1f94d54d9402e4e02120a0aa4215d064436c52b7d5bd48f"
   license "BSD-3-Clause"
-  revision 8
-
-  stable do
-    url "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.11.1.tar.gz"
-    sha256 "a61558e53abafbc909e0996f91cfd2d7a400fcadf6b8cfb0ea3172b78422c74e"
-
-    # VTK 9 will be supported in PCL 1.12.
-    depends_on "vtk@8.2"
-  end
+  head "https://github.com/PointCloudLibrary/pcl.git", branch: "master"
 
   bottle do
-    sha256 arm64_big_sur: "a39839fa94d2b186beba36a22e6160167bf521f4f7bb46cb7c095fe2604c7f5b"
-    sha256 big_sur:       "f174cdcda4a169701e46c8c6eb13eb71febc73ad39a625a01a174d1d96548ced"
-    sha256 catalina:      "7509cc24de7ba27d81346e25ee232c5e68b2f0bf2645addc13671ab3e93f5471"
-    sha256 mojave:        "7ab97c02ed7569d33470de4661345c33a37e020266f4d0a1fb139abaee09acb9"
-  end
-
-  head do
-    url "https://github.com/PointCloudLibrary/pcl.git"
-
-    depends_on "vtk"
+    sha256 cellar: :any, arm64_big_sur: "dcaa7b792b192a7f0032ba29f9fd6958ec9ff8d436ac3ddbf38c7d6472928ae4"
+    sha256 cellar: :any, big_sur:       "734d0e3bb156a42f02a50f5aeddd825b11384f00915ac5c0a50e22ae38d3df9e"
+    sha256 cellar: :any, catalina:      "7259cc6d04a3c34726ae749cc36cbd108bef21f2e40d2d7b2629cb5773e71a0f"
+    sha256 cellar: :any, mojave:        "810e7a8c44c5ea132186cc9303efb6db5a65501d7513095b0e3a5f03e1b8df2c"
   end
 
   depends_on "cmake" => [:build, :test]
@@ -37,6 +25,7 @@ class Pcl < Formula
   depends_on "libusb"
   depends_on "qhull"
   depends_on "qt@5"
+  depends_on "vtk"
 
   def install
     args = std_cmake_args + %w[
@@ -113,7 +102,9 @@ class Pcl < Formula
       # (Homebrew/homebrew-test-bot#544) when bumping the boost
       # revision without bumping this formula's revision as well
       ENV.prepend_path "PKG_CONFIG_PATH", Formula["eigen"].opt_share/"pkgconfig"
-      system "cmake", "..", *std_cmake_args
+      ENV.delete "CPATH" # `error: no member named 'signbit' in the global namespace`
+      system "cmake", "..", "-DQt5_DIR=#{Formula["qt@5"].opt_lib}/cmake/Qt5",
+                            *std_cmake_args
       system "make"
       system "./pcd_write"
       assert_predicate (testpath/"build/test_pcd.pcd"), :exist?

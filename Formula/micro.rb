@@ -2,17 +2,17 @@ class Micro < Formula
   desc "Modern and intuitive terminal-based text editor"
   homepage "https://github.com/zyedidia/micro"
   url "https://github.com/zyedidia/micro.git",
-      tag:      "v2.0.8",
-      revision: "cfcb2e4577fe00e744d5684c0871fd8ce849930c"
+      tag:      "v2.0.10",
+      revision: "b97638566ea8431712f0faafe23661da2db0e8ec"
   license "MIT"
   head "https://github.com/zyedidia/micro.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "9698612758eab11ab60d57065d9314f5560f38de95308033758d671b2f39e52d"
-    sha256 cellar: :any_skip_relocation, big_sur:       "6d494288ce3dda95db3d44139de755a1d7436bfa41c848a5d6f8302107c3874c"
-    sha256 cellar: :any_skip_relocation, catalina:      "bdc49d5bc540b16e9165eadb793fcf755a4342f1b53fb9df9d5859b51a8335c9"
-    sha256 cellar: :any_skip_relocation, mojave:        "16194e8139cf062a789f767e4d9e572a31b5438c7abf36ee2615093de956d5a8"
-    sha256 cellar: :any_skip_relocation, high_sierra:   "5ddc2cdc29a432a2515950946076ebb1ddf7dba410019fd77790f3ba5a2d874c"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "6cb2c86f690a52f3242021d6a567b0f15943f8c68af263298aae17c67bdcfcc4"
+    sha256 cellar: :any_skip_relocation, big_sur:       "5bcf6e60611b745183aeda8294088f9b42bbcc367ba9765c570b6c4224e26047"
+    sha256 cellar: :any_skip_relocation, catalina:      "2915aafc3513241afd778caeadc146ad0df2a7124e03012c1bf2ba867194deb2"
+    sha256 cellar: :any_skip_relocation, mojave:        "35b0c0717cfb5c7c78cfa2f51bf162594f7f6f84ac88243c51e40c0ada9fb496"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "4a284bc50e33f7792f802e460c2c400ffcbfb392927e6ece1dfba876c5c5d33f"
   end
 
   depends_on "go" => :build

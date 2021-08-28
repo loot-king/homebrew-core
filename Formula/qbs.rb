@@ -1,21 +1,17 @@
 class Qbs < Formula
   desc "Build tool for developing projects across multiple platforms"
   homepage "https://wiki.qt.io/Qbs"
-  url "https://download.qt.io/official_releases/qbs/1.18.0/qbs-src-1.18.0.tar.gz"
-  sha256 "3d0211e021bea3e56c4d5a65c789d11543cc0b6e88f1bfe23c2f8ebf0f89f8d4"
+  url "https://download.qt.io/official_releases/qbs/1.19.2/qbs-src-1.19.2.tar.gz"
+  sha256 "91fd5ca08f170e8178dd5183579f03e56965648770b7e7a09258550aee53950f"
   license :cannot_represent
-  revision 1
-  head "git://code.qt.io/qbs/qbs.git"
+  head "https://code.qt.io/qbs/qbs.git", branch: "master"
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "86bde1552e00e2069904bea59a76654f6fe131e1ee48ec20fb8374dfe124bc8c"
-    sha256 cellar: :any, big_sur:       "2877134418908dda0931c2e56213a2d1059548fd1f10823887d1e5a6dd5e8a68"
-    sha256 cellar: :any, catalina:      "d8ba14e6afe3f8d292f074c5bfa655102f5b483e21789068d55b04671569806a"
-    sha256 cellar: :any, mojave:        "9b61fc6f4b8b8b1837a9d8d06ade301397b098d6d22e6fefe5ea1e73746551ce"
+    sha256 cellar: :any, arm64_big_sur: "cdd22251b3d3e27fb2b22f548850f4678232c2ce414523f7c893a9d505e74ac0"
+    sha256 cellar: :any, big_sur:       "05e562bc5cafe7d56b1441614240bdfb22e08fee144925f66e09ee18be9b34f3"
+    sha256 cellar: :any, catalina:      "43c24868f1362facb5e3477f07739c41c70339bfcb46603e03de128c27f0d7dc"
+    sha256 cellar: :any, mojave:        "a6b34b1498c4d73066e6d3c0e9119d7e7ca9748b668df9c62f09b7b02b6ffecf"
   end
-
-  # https://www.qt.io/blog/2018/10/29/deprecation-of-qbs
-  deprecate! because: :deprecated_upstream
 
   depends_on "qt@5"
 

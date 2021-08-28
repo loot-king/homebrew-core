@@ -3,8 +3,8 @@ class Libsvm < Formula
   homepage "https://www.csie.ntu.edu.tw/~cjlin/libsvm/"
 
   # TODO: Upstream deletes old downloads, so we need a mirror
-  url "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-3.24.tar.gz"
-  sha256 "d5881a201a4e6227bf8e2f5de7d6eeaef481c6c2bb9540aeca547737844f8696"
+  url "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-3.25.tar.gz"
+  sha256 "52350e8aa740b176e1d773e9dc08f1340218c37e01bec37ab90db0127e4bb5e5"
   license "BSD-3-Clause"
 
   livecheck do
@@ -13,20 +13,21 @@ class Libsvm < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "4d6fc26a72ff158d865cd8d4dc5354d7a1ff0f294e292bd4c872ddb9fadf9e49"
-    sha256 cellar: :any, big_sur:       "da8cea69e489c678a06f28ba6032a8f3f8f899ac344741bd4b1090da8e33eafe"
-    sha256 cellar: :any, catalina:      "8dded17ad2e22342ae25d392d5e4d9776572f8b5081e62064e97c027f8c481e6"
-    sha256 cellar: :any, mojave:        "4db9a3e77edfda475ca8bdcad82ce1443ed50df41b28b59d726b1fa81944e2c7"
-    sha256 cellar: :any, high_sierra:   "5d4ee9cec3a0048ef8abd328022fa3752c3dc2ead9d86d9995b79558700dbbd2"
+    sha256 cellar: :any,                 arm64_big_sur: "ae3fff4762882360a23280215cafdc93d3da1d598816d34cfb0e7b6a922180e3"
+    sha256 cellar: :any,                 big_sur:       "27481a34d2af64572b48b268c8e47d7700aab4ec9dc2978216c471d512a4cb81"
+    sha256 cellar: :any,                 catalina:      "ad8d34d17fdca6b25374eff11b5f2b1067d19894358b23c04b3b8ac0f82180b1"
+    sha256 cellar: :any,                 mojave:        "485eec232bd3cc0619494de50cac4ef4a5b65761d5d6a062c62e07d9a0007e31"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "a1383dac0311d28b61447e56c92affea59d3404c1a83abc5674276056ebe752c"
   end
 
   def install
+    on_linux { ENV.append_to_cflags "-fPIC" }
     system "make", "CFLAGS=#{ENV.cflags}"
     system "make", "lib"
     bin.install "svm-scale", "svm-train", "svm-predict"
-    lib.install "libsvm.so.2" => "libsvm.2.dylib"
-    lib.install_symlink "libsvm.2.dylib" => "libsvm.dylib"
-    MachO::Tools.change_dylib_id("#{lib}/libsvm.2.dylib", "#{lib}/libsvm.2.dylib")
+    lib.install "libsvm.so.2" => shared_library("libsvm", 2)
+    lib.install_symlink shared_library("libsvm", 2) => shared_library("libsvm")
+    on_macos { MachO::Tools.change_dylib_id("#{lib}/libsvm.2.dylib", "#{lib}/libsvm.2.dylib") }
     include.install "svm.h"
   end
 

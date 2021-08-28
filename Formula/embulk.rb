@@ -7,6 +7,7 @@ class Embulk < Formula
   url "https://github.com/embulk/embulk/releases/download/v0.9.23/embulk-0.9.23.jar"
   sha256 "153977fad482bf52100dd96f47e897c87b48de4fb13bccd6b3101475d3a5ebb9"
   license "Apache-2.0"
+  revision 1
   version_scheme 1
 
   livecheck do
@@ -14,18 +15,16 @@ class Embulk < Formula
     regex(%r{(?<!un)Stable.+?href=.*?/tag/v?(\d+(?:\.\d+)+)["' >]}im)
   end
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "2ab7a8a004f97f65e320145bbb8a29ac6a7a4c076078fef29ba5f0ab0fea149c"
+  end
 
+  depends_on arch: :x86_64 # openjdk@8 is not supported on ARM
   depends_on "openjdk@8"
 
   def install
-    # Execute through /bin/bash to be compatible with OS X 10.9.
-    libexec.install "embulk-#{version}.jar" => "embulk.jar"
-    (bin/"embulk").write <<~EOS
-      #!/bin/bash
-      export JAVA_HOME="${JAVA_HOME:-#{Formula["openjdk@8"].opt_prefix}}"
-      exec /bin/bash "#{libexec}/embulk.jar" "$@"
-    EOS
+    libexec.install "embulk-#{version}.jar"
+    bin.write_jar_script libexec/"embulk-#{version}.jar", "embulk", java_version: "1.8"
   end
 
   test do

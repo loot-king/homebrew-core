@@ -2,8 +2,8 @@ class KubernetesCli < Formula
   desc "Kubernetes command-line interface"
   homepage "https://kubernetes.io/"
   url "https://github.com/kubernetes/kubernetes.git",
-      tag:      "v1.21.0",
-      revision: "cb303e613a121a29364f75cc67d3d580833a7479"
+      tag:      "v1.22.1",
+      revision: "632ed300f2c34f6d6d15ca4cef3d3c7073412212"
   license "Apache-2.0"
   head "https://github.com/kubernetes/kubernetes.git"
 
@@ -13,13 +13,14 @@ class KubernetesCli < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "b9738e0e124ed9f41246b226f7b35d3ff1690cf490cb0de60df3832fba6033b9"
-    sha256 cellar: :any_skip_relocation, big_sur:       "9af94c3f27d4a8d95fa874453c30208f8fff41becb19668260099dcd2708ec61"
-    sha256 cellar: :any_skip_relocation, catalina:      "d124e2ae0aa980f93648f325715ab88b09a9df9213f6a448e816630403271896"
-    sha256 cellar: :any_skip_relocation, mojave:        "6286ea1e71812947b61921a11c186f9d68aeb2fac012f8334d404cb97c71acc0"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "0a1898699bc316f6c691e7c1be98d0ce69f79e634c81770341dddc23f8e3a01f"
+    sha256 cellar: :any_skip_relocation, big_sur:       "c4badce549b55e752e354d564d1886741c40a839fbce55b4e552bd7bc40e3bce"
+    sha256 cellar: :any_skip_relocation, mojave:        "1c7f8280868fc960791f6123bf72886240c186e92ff161d76c173d69a7b39972"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "9812e84fde020d360255e42a64db2d788767ef81c9baac8ee7fd7af016ae6efb"
   end
 
   depends_on "bash" => :build
+  depends_on "coreutils" => :build
   depends_on "go" => :build
 
   uses_from_macos "rsync" => :build
@@ -29,6 +30,7 @@ class KubernetesCli < Formula
     rm_rf ".brew_home"
 
     # Make binary
+    ENV.prepend_path "PATH", Formula["coreutils"].libexec/"gnubin" # needs GNU date
     system "make", "WHAT=cmd/kubectl"
     bin.install "_output/bin/kubectl"
 

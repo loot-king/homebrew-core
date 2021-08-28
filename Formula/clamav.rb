@@ -1,9 +1,9 @@
 class Clamav < Formula
   desc "Anti-virus software"
   homepage "https://www.clamav.net/"
-  url "https://www.clamav.net/downloads/production/clamav-0.103.2.tar.gz"
-  mirror "https://fossies.org/linux/misc/clamav-0.103.2.tar.gz"
-  sha256 "d4b5d0ac666262e423a326fb54778caa7c69624d6c3f9542895feb8478271bd2"
+  url "https://www.clamav.net/downloads/production/clamav-0.103.3.tar.gz"
+  mirror "https://fossies.org/linux/misc/clamav-0.103.3.tar.gz"
+  sha256 "9f6e3d18449f3d1a3992771d696685249dfa12736fe2b2929858f2c7d8276ae9"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -12,10 +12,11 @@ class Clamav < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "08f7636b609fddf9d71d654831910e8354096d2352b31eedbe3a8f363c36072c"
-    sha256 big_sur:       "fe53693f8f14392597ac7495d80188bdee88455862c830d6ada5613ddbe50084"
-    sha256 catalina:      "ad496a6937046968511af7c71bac5514ce35f8c104f1711bb6b2ffe1bde372eb"
-    sha256 mojave:        "850cecb7bc17f8a0000e4666a1432b320722712fb394191c6b488c1307c60d0c"
+    sha256 arm64_big_sur: "de0e15a9827c466360b9cd0f2d3f193134834032998448d7981ac4a8f74b85b5"
+    sha256 big_sur:       "0336a74d46b95394919ed3de66e3fe02a1e58993892f3e5221dea29ad56c301b"
+    sha256 catalina:      "5b0e6cc76e434d7ebfb9301f4b6de21b647f7c0cb3a89d7ca7d6d92c37c34600"
+    sha256 mojave:        "a7ebd59427dddd39419a5dceb5f6c85f55d6040d41878e4fca931e384f906fe2"
+    sha256 x86_64_linux:  "f921185f5319873958091bd65bd535d33cb9230a3a9a94fd73041b42d7ed4074"
   end
 
   head do
@@ -28,7 +29,6 @@ class Clamav < Formula
 
   depends_on "pkg-config" => :build
   depends_on "json-c"
-  depends_on "libiconv"
   depends_on "libtool"
   depends_on "openssl@1.1"
   depends_on "pcre2"
@@ -38,6 +38,10 @@ class Clamav < Formula
   uses_from_macos "curl"
   uses_from_macos "libxml2"
   uses_from_macos "zlib"
+
+  on_macos do
+    depends_on "libiconv"
+  end
 
   skip_clean "share/clamav"
 
@@ -50,14 +54,14 @@ class Clamav < Formula
       --sysconfdir=#{etc}/clamav
       --disable-zlib-vcheck
       --with-llvm=no
-      --with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}
-      --with-iconv=#{Formula["libiconv"].opt_prefix}
       --with-libjson=#{Formula["json-c"].opt_prefix}
       --with-openssl=#{Formula["openssl@1.1"].opt_prefix}
       --with-pcre=#{Formula["pcre2"].opt_prefix}
     ]
 
     on_macos do
+      args << "--with-libiconv-prefix=#{Formula["libiconv"].opt_prefix}"
+      args << "--with-iconv=#{Formula["libiconv"].opt_prefix}"
       args << "--with-zlib=#{MacOS.sdk_path_if_needed}/usr"
       args << "--with-libbz2-prefix=#{MacOS.sdk_path_if_needed}/usr"
       args << "--with-xml=#{MacOS.sdk_path_if_needed}/usr"

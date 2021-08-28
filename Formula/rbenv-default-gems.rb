@@ -5,9 +5,12 @@ class RbenvDefaultGems < Formula
   sha256 "8271d58168ab10f0ace285dc4c394e2de8f2d1ccc24032e6ed5924f38dc24822"
   license "MIT"
   revision 1
-  head "https://github.com/sstephenson/rbenv-default-gems.git"
+  head "https://github.com/sstephenson/rbenv-default-gems.git", branch: "master"
 
-  bottle :unneeded
+  bottle do
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, all: "1e1fdba37bf88db84ae56cd101d333b958c3adfab8b0e4515838cf5c3ad6b753"
+  end
 
   depends_on "rbenv"
 

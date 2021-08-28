@@ -1,30 +1,29 @@
 class Youtubedr < Formula
   desc "Download Youtube Video in Golang"
   homepage "https://github.com/kkdai/youtube"
-  url "https://github.com/kkdai/youtube/archive/v2.6.1.tar.gz"
-  sha256 "8f42e8807dd37bbb2d3ebb053bda81cdcaf8fab0ba5d75ea8ca2007f5f4d1e58"
+  url "https://github.com/kkdai/youtube/archive/v2.7.4.tar.gz"
+  sha256 "991b15a0b6941c1bf2c3d691b8b5f2f37b28a041e735813da051cb5a01e38695"
   license "MIT"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "83514c2bd18be0eea281272629865ac833e9e26aab80799392648d1db989747e"
-    sha256 cellar: :any_skip_relocation, big_sur:       "d929ce0d785f31dc55d0cd29f01dfccf2f7c850a2c0740545292f5f4d93b9db6"
-    sha256 cellar: :any_skip_relocation, catalina:      "4454b14668fe574445455408de68cb6ffa8846925750ee6a43be7f5bdf720a13"
-    sha256 cellar: :any_skip_relocation, mojave:        "8bfe83fde8866d3603e9acba1112c8ba4e99a3250af5b81aee98370b49f9d35b"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "2ee6ab25e29be16fb8a7e96032ebd1e91848368fdf75504e5ff7e4409db1732d"
+    sha256 cellar: :any_skip_relocation, big_sur:       "80d0c11df93af2a56e092d2aaa7012ae61c781045ceddffe4cdc9872e9efe2f0"
+    sha256 cellar: :any_skip_relocation, catalina:      "80d0c11df93af2a56e092d2aaa7012ae61c781045ceddffe4cdc9872e9efe2f0"
+    sha256 cellar: :any_skip_relocation, mojave:        "80d0c11df93af2a56e092d2aaa7012ae61c781045ceddffe4cdc9872e9efe2f0"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "48ee061f5c900b2c775d4ab135f2feffefd1799d094bb4d5e8482e91329b7e6a"
   end
 
   depends_on "go" => :build
 
   def install
-    build_time = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-
     ldflags = %W[
       -s -w
       -X main.version=#{version}
-      -X main.date=#{build_time}
-    ]
+      -X main.date=#{time.iso8601}
+    ].join(" ")
 
     ENV["CGO_ENABLED"] = "0"
-    system "go", "build", "-ldflags", ldflags.join(" "), *std_go_args, "./cmd/youtubedr"
+    system "go", "build", *std_go_args(ldflags: ldflags), "./cmd/youtubedr"
   end
 
   test do

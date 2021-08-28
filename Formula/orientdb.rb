@@ -1,8 +1,8 @@
 class Orientdb < Formula
   desc "Graph database"
   homepage "https://orientdb.org/"
-  url "https://s3.us-east-2.amazonaws.com/orientdb3/releases/3.1.11/orientdb-3.1.11.zip"
-  sha256 "fcd2e3d6b4d8127f00f22f60b0eb37e66560acf749fb567ce2af6123ba688209"
+  url "https://s3.us-east-2.amazonaws.com/orientdb3/releases/3.2.0/orientdb-3.2.0.zip"
+  sha256 "c9d669e6f7645b2217fe38be6d74cdef1ff3533b69b4ee1b3c0bd79744880bcd"
   license "Apache-2.0"
 
   livecheck do
@@ -11,10 +11,8 @@ class Orientdb < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "8fc2e15f008dfda6ec24956114d40abc6df64e2fda77fb89efa5a35601d90a54"
-    sha256 cellar: :any_skip_relocation, big_sur:       "6d607870d8463f0a91012bb061e808cde4ee7af46f16d7338352a4b1ed6be36d"
-    sha256 cellar: :any_skip_relocation, catalina:      "6d607870d8463f0a91012bb061e808cde4ee7af46f16d7338352a4b1ed6be36d"
-    sha256 cellar: :any_skip_relocation, mojave:        "b1ffa16f0d1bcf43854c8436e988c3026f458f2d49933b5823a3230f83d82050"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, all: "c487c1824c6d2e48f78437a0934f2743bfeb8731c2a3040aa2c27bc40252c642"
   end
 
   depends_on "maven" => :build
@@ -67,36 +65,12 @@ class Orientdb < Formula
     EOS
   end
 
-  plist_options manual: "orientdb start"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>KeepAlive</key>
-            <dict>
-              <key>SuccessfulExit</key>
-              <false/>
-            </dict>
-          <key>Label</key>
-          <string>homebrew.mxcl.orientdb</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{HOMEBREW_PREFIX}/opt/orientdb/libexec/bin/server.sh</string>
-          </array>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>WorkingDirectory</key>
-          <string>/usr/local/var</string>
-          <key>StandardErrorPath</key>
-          <string>/usr/local/var/log/orientdb/serror.log</string>
-          <key>StandardOutPath</key>
-          <string>/usr/local/var/log/orientdb/sout.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run opt_libexec/"bin/server.sh"
+    keep_alive true
+    working_dir var
+    log_path var/"log/orientdb/sout.log"
+    error_log_path var/"log/orientdb/serror.log"
   end
 
   test do

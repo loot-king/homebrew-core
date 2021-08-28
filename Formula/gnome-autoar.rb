@@ -1,8 +1,8 @@
 class GnomeAutoar < Formula
   desc "GNOME library for archive handling"
   homepage "https://github.com/GNOME/gnome-autoar"
-  url "https://download.gnome.org/sources/gnome-autoar/0.3/gnome-autoar-0.3.1.tar.xz"
-  sha256 "0e78713e6f0de339fdee16bab82753ae290fe80fa7b4ba6e3db8c1465b81d0f8"
+  url "https://download.gnome.org/sources/gnome-autoar/0.4/gnome-autoar-0.4.0.tar.xz"
+  sha256 "ea8c6d524babc712ac59e1d0e3ac8bf0137482dadf33c94fe9113794a1bc4474"
   license "LGPL-2.1-or-later"
 
   # gnome-autoar doesn't seem to follow the typical GNOME version format where
@@ -14,24 +14,23 @@ class GnomeAutoar < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "bce66e3b2f1bf7e89cf91260a60a2ee50761fad6ac4313433a04b29e7fc84334"
-    sha256 big_sur:       "0b356bb42d02fd282554b943216524156835d9d294693ec4228eec830d742074"
-    sha256 catalina:      "637dabc9403bb4a841a4ad1a37913c8f5408919536962d0933863c73b36265a1"
-    sha256 mojave:        "dd4d6a2cac634191e73cd0423e444c89694838569d65f062fa9d21373ca782ca"
+    sha256 cellar: :any, arm64_big_sur: "c878f58ddccf4f6ccb9fb21f85284434072706235dca4dcd281b02fe3206ca4c"
+    sha256 cellar: :any, big_sur:       "28531f6dadc4e792c3689da6c041a65134a5f9a3eeb8cefdddba3e91dbc2fddc"
+    sha256 cellar: :any, catalina:      "0de2d5a412701bd644080e47c4dcae47f262f76a6f5762477f3497f42202d647"
+    sha256 cellar: :any, mojave:        "93261513fc4078cecc0e921d809de1f549e5c39e83cf06fbbeaea194fe83b850"
   end
 
-  depends_on "pkg-config" => :build
+  depends_on "meson" => :build
+  depends_on "ninja" => :build
   depends_on "gtk+3"
   depends_on "libarchive"
 
   def install
-    system "./configure", "--disable-debug",
-                          "--disable-dependency-tracking",
-                          "--disable-silent-rules",
-                          "--prefix=#{prefix}",
-                          "--disable-glibtest",
-                          "--disable-schemas-compile"
-    system "make", "install"
+    mkdir "build" do
+      system "meson", *std_meson_args, ".."
+      system "ninja", "-v"
+      system "ninja", "install", "-v"
+    end
   end
 
   def post_install

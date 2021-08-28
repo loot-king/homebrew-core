@@ -3,12 +3,14 @@ class Grc < Formula
 
   desc "Colorize logfiles and command output"
   homepage "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html"
-  url "https://github.com/garabik/grc/archive/v1.12.tar.gz"
-  sha256 "4ca20134775ca15b2e26b4a464786aacd8c114cc793557b53959592b279b8d3c"
+  url "https://github.com/garabik/grc/archive/v1.13.tar.gz"
+  sha256 "a7b10d4316b59ca50f6b749f1d080cea0b41cb3b7258099c3eb195659d1f144f"
   license "GPL-2.0-or-later"
   head "https://github.com/garabik/grc.git", branch: "devel"
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "5032986a02da858c72ea6124457e83ba43710a6ae6a027d6e2d2350176eae51d"
+  end
 
   depends_on "python@3.9"
 
@@ -16,8 +18,9 @@ class Grc < Formula
 
   def install
     # fix non-standard prefix installs
-    inreplace ["grc", "grc.1"], "/etc", etc
-    inreplace ["grcat", "grcat.1"], "/usr/local", HOMEBREW_PREFIX
+    inreplace "grc", "/usr/local/etc/", "#{etc}/"
+    inreplace "grc.1", " /etc/", " #{etc}/"
+    inreplace ["grcat", "grcat.1"], "/usr/local/share/grc/", "#{pkgshare}/"
 
     # so that the completions don't end up in etc/profile.d
     inreplace "install.sh",

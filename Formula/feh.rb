@@ -1,8 +1,8 @@
 class Feh < Formula
   desc "X11 image viewer"
   homepage "https://feh.finalrewind.org/"
-  url "https://feh.finalrewind.org/feh-3.6.3.tar.bz2"
-  sha256 "437420f37f11614e008d066e2a3bdefcfc78144c8212998b2bacdd5d21ea23b4"
+  url "https://feh.finalrewind.org/feh-3.7.1.tar.bz2"
+  sha256 "57ab1ca61f57c96595878069f550d36f518530f88fa31b74cc39cd739f9258b6"
   license "MIT-feh"
 
   livecheck do
@@ -11,10 +11,11 @@ class Feh < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "f907275a410ad5d1766936c4e3a88d970a8b71bc1a0acc029e71c36dfad9569d"
-    sha256 big_sur:       "cc6e98325f1233c484f700f04cabb9b73061e2d1cb6c24de954ad33a9a4cfa7c"
-    sha256 catalina:      "a26d86d34fca0fe0a87aa9330e20614a5c1aaede90d79a8fc482fc64259008cc"
-    sha256 mojave:        "4328378783d1519676d8d53be065cd9ee52e583b9e917fc507afeff30eb85f2f"
+    sha256 arm64_big_sur: "08ce9eb5ac25166311d929dbbef66a543934f610767d5e89f59345464414aa9a"
+    sha256 big_sur:       "9f5578b737f72644365e9f5e0135bbc28657087584888f66864a452b6c034c3d"
+    sha256 catalina:      "7d5a0033554e7ccc69901c40f3385386ce597915ecd39cd43774f952eb60f9f4"
+    sha256 mojave:        "fcb14423edc7a7070f547fe0878f473c9399b23868317be1a1ea18ac85d6e085"
+    sha256 x86_64_linux:  "f2aa45fd63df563855826e20371aa94053dfc5c1b612027532c0de7fafdac2d5"
   end
 
   depends_on "imlib2"

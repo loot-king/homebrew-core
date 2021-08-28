@@ -1,11 +1,10 @@
 class Packer < Formula
   desc "Tool for creating identical machine images for multiple platforms"
   homepage "https://packer.io"
-  url "https://github.com/hashicorp/packer.git",
-      tag:      "v1.7.2",
-      revision: "1f834e229aa722ea1279ec32503a2ea011f24e03"
+  url "https://github.com/hashicorp/packer/archive/v1.7.4.tar.gz"
+  sha256 "00a093fa302bde7b1eb01de85474524479126cc91309879f0c33f413918506a5"
   license "MPL-2.0"
-  head "https://github.com/hashicorp/packer.git"
+  head "https://github.com/hashicorp/packer.git", branch: "master"
 
   livecheck do
     url "https://releases.hashicorp.com/packer/"
@@ -13,17 +12,22 @@ class Packer < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, big_sur:  "174622d9c8704b7c2ae0bcfb9c4a60ea5ad93be19f4a475d5a09bf1497380e73"
-    sha256 cellar: :any_skip_relocation, catalina: "c34469ec8c3131098adff53e3b592eb81873fbd62a1108249101a44715ed0c6d"
-    sha256 cellar: :any_skip_relocation, mojave:   "d3d538a52c087d74e4124886f9ccbba3efa4698322d65a1e2c3df79fd8680130"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "5857e3b4d569263e92c0215bfbbe0da92396d12573916efb2d8c214afd2c8a14"
+    sha256 cellar: :any_skip_relocation, big_sur:       "a3904f2fbc7fa390464436188302479a0612ed9ec80a771542d7c6dc54b797c0"
+    sha256 cellar: :any_skip_relocation, catalina:      "b0a55acb7d294f529db1cb83533d837154ac8d3c174d2ca089233a3bf27be06e"
+    sha256 cellar: :any_skip_relocation, mojave:        "9bdf0e9d68b8cace130ebd58e88821da155954f575893f2dbe9b97bec7e38562"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "28427704a6de254be710445deff553349ba3300416758559ecf8e74c065353e1"
   end
 
   depends_on "go" => :build
 
   def install
-    system "go", "build", *std_go_args
+    system "go", "build", *std_go_args(ldflags: "-s -w")
+
+    # Allow packer to find plugins in Homebrew prefix
+    bin.env_script_all_files libexec/"bin", PACKER_PLUGIN_PATH: "$PACKER_PLUGIN_PATH:#{HOMEBREW_PREFIX/"bin"}"
+
     zsh_completion.install "contrib/zsh-completion/_packer"
-    prefix.install_metafiles
   end
 
   test do

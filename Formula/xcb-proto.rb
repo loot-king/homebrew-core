@@ -1,28 +1,20 @@
 class XcbProto < Formula
   desc "X.Org: XML-XCB protocol descriptions for libxcb code generation"
   homepage "https://www.x.org/"
-  url "https://xcb.freedesktop.org/dist/xcb-proto-1.14.tar.gz"
-  sha256 "1c3fa23d091fb5e4f1e9bf145a902161cec00d260fabf880a7a248b02ab27031"
+  url "https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-1.14.1.tar.xz"
+  sha256 "f04add9a972ac334ea11d9d7eb4fc7f8883835da3e4859c9afa971efdf57fcc3"
   license "MIT"
-  revision 2
 
   bottle do
-    rebuild 2
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "3ab62d4a00b0901a5676a904d9d58e263a2c6220d6bb08ea8bcee72ccede7b7e"
-    sha256 cellar: :any_skip_relocation, big_sur:       "4059bed377fd405eb7d2da7a550d2cc1fe33facfa2d2b0c1f3b4b8ebb40c70e2"
-    sha256 cellar: :any_skip_relocation, catalina:      "2cb7d82e47a13c5e90f1fb8e90eccd596efa140f13d3c34bdf594f2eb07adff4"
-    sha256 cellar: :any_skip_relocation, mojave:        "f1bb7552c78b5f0d5adb7085e509c7ecaa6da5afd3bfa865546778e0dcd9a5a8"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "b46e6d4bc878650fdf3a3e7b1ec9b9d9e80cf7d40d347d7ef8f9a244ff656fa1"
+    sha256 cellar: :any_skip_relocation, big_sur:       "b46e6d4bc878650fdf3a3e7b1ec9b9d9e80cf7d40d347d7ef8f9a244ff656fa1"
+    sha256 cellar: :any_skip_relocation, catalina:      "b46e6d4bc878650fdf3a3e7b1ec9b9d9e80cf7d40d347d7ef8f9a244ff656fa1"
+    sha256 cellar: :any_skip_relocation, mojave:        "24b88c1bf0f5ecc407136ed7139f0690167be335688c0c59990f2d393b6f75aa"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "f77acc7eceef3071a6ad89edf2856aaee324d0986491e3b4cd512741ddd6385b"
   end
 
   depends_on "pkg-config" => [:build, :test]
   depends_on "python@3.9" => :build
-
-  # Fix for Python 3.9. Use math.gcd() for Python >= 3.5.
-  # fractions.gcd() has been deprecated since Python 3.5.
-  patch do
-    url "https://gitlab.freedesktop.org/xorg/proto/xcbproto/-/commit/426ae35bee1fa0fdb8b5120b1dcd20cee6e34512.diff"
-    sha256 "53593ed1b146baa47755da8e9c58f51b1451eec038b421b145d3f583055c55e0"
-  end
 
   def install
     args = %W[

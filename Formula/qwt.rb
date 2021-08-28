@@ -1,16 +1,20 @@
 class Qwt < Formula
   desc "Qt Widgets for Technical Applications"
   homepage "https://qwt.sourceforge.io/"
-  url "https://downloads.sourceforge.net/project/qwt/qwt/6.1.6/qwt-6.1.6.tar.bz2"
-  sha256 "99460d31c115ee4117b0175d885f47c2c590d784206f09815dc058fbe5ede1f6"
+  url "https://downloads.sourceforge.net/project/qwt/qwt/6.2.0/qwt-6.2.0.tar.bz2"
+  sha256 "9194f6513955d0fd7300f67158175064460197abab1a92fa127a67a4b0b71530"
   license "LGPL-2.1-only" => { with: "Qwt-exception-1.0" }
-  revision 1
+
+  livecheck do
+    url :stable
+    regex(%r{url=.*?/qwt[._-]v?(\d+(?:\.\d+)+)\.t}i)
+  end
 
   bottle do
-    sha256 arm64_big_sur: "61c473a8981af59dad4690620287f6386da12998020b7f869e23336bd1255c77"
-    sha256 big_sur:       "01d43fecf51f4177df97f93b868e93b916ef679955e9db5b7b6725113b25e139"
-    sha256 catalina:      "1d98e9f3c8df57fe0d1659afe81cb6d89b71145d0ba3247d08dc00cc1092dbb0"
-    sha256 mojave:        "05217eda2947313edf1946215b32b7f8bfbfc2d8ac69bb05c5bb8fbc1e5fc68b"
+    sha256 cellar: :any, arm64_big_sur: "0538bfe404c21c264efe57fbc36d3cff81c39b86679d67c48501166597ab8cad"
+    sha256 cellar: :any, big_sur:       "14a5fd16a5abcf3a04b3f6d097649fbc1dd51e9fbb50d05f885757a9d9f3d9f9"
+    sha256 cellar: :any, catalina:      "c3a727be657b20efdd6a8ddec980bd28f5367ae41a0a7abefb74af86c1f24e83"
+    sha256 cellar: :any, mojave:        "5bb62a4122ade6485247357b22f0619ff35f518d9ea3f454f05c7d5c4b60985e"
   end
 
   depends_on "qt@5"

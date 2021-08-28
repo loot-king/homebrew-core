@@ -1,8 +1,8 @@
 class Abcmidi < Formula
   desc "Converts abc music notation files to MIDI files"
   homepage "https://ifdo.ca/~seymour/runabc/top.html"
-  url "https://ifdo.ca/~seymour/runabc/abcMIDI-2021.03.30.zip"
-  sha256 "02d1a1cb3ce7ad571f20ff6e4e68d5f786a50a962384fcee845860f63ae31451"
+  url "https://ifdo.ca/~seymour/runabc/abcMIDI-2021.06.27.zip"
+  sha256 "08ecbdda0ab81551f4d319e2db71f81f566b21adba252d8793c70a137bc0dd38"
   license "GPL-2.0-or-later"
 
   livecheck do
@@ -11,18 +11,14 @@ class Abcmidi < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "d1bc1eca8b5a82cf33bb39e38518dbf40a72f6c50e54c07ba48b88484c8e8c2e"
-    sha256 cellar: :any_skip_relocation, big_sur:       "361a6c4df889c9ca8ed1d0d90ca0e7ff554ceeff14311ad484179966b93b1780"
-    sha256 cellar: :any_skip_relocation, catalina:      "a9a33fdd95a2deed02d63b5649319c311c790d83f0825aee39b3322590c9d7d8"
-    sha256 cellar: :any_skip_relocation, mojave:        "3ffd1bd17d44ecd6fdb3f925b09c5c4c298aeccb50577980b3394e5ca0459d9d"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "309575c221d6195a13aa77b95235fc6e11cad5153ebc74b8baed5e9252c92deb"
+    sha256 cellar: :any_skip_relocation, big_sur:       "7240f1f7c440845ed966a4cc4f0f163af65627591411efd6753f82cd6e3f39f0"
+    sha256 cellar: :any_skip_relocation, catalina:      "3d3b7913725363d966cc6d115a7601352110281f78c2efd30c396a4d3edf3516"
+    sha256 cellar: :any_skip_relocation, mojave:        "d79407deb993baa511a74a8b63985ca9d5467a3d236f6b408acf38f8f05e2c4e"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b31103ca8b0030546ccb3a5be517a4d13009c58d363b4751bf8a70662fc1ba90"
   end
 
   def install
-    # configure creates a "Makefile" file. A "makefile" file already exist in
-    # the tarball. On case-sensitive file-systems, the "makefile" file won't
-    # be overridden and will be chosen over the "Makefile" file.
-    rm "makefile"
-
     system "./configure", "--disable-debug",
                           "--prefix=#{prefix}",
                           "--mandir=#{man}"

@@ -1,13 +1,17 @@
 class Metabase < Formula
   desc "Business intelligence report server"
   homepage "https://www.metabase.com/"
-  url "https://downloads.metabase.com/v0.39.0.1/metabase.jar"
-  sha256 "c80b2290d660fbf3fbd0b2d2b64caaefeaea894e3132badb5ca74321e00bfefe"
+  url "https://downloads.metabase.com/v0.40.3.1/metabase.jar"
+  sha256 "d5f5f15e4db45f62a6d5ae47224f12bfd861f2c98aaf5d42e635e9702557ef6a"
   license "AGPL-3.0-only"
 
   livecheck do
     url "https://www.metabase.com/start/oss/jar.html"
     regex(%r{href=.*?/v?(\d+(?:\.\d+)+)/metabase\.jar}i)
+  end
+
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "f9100193d467834a10852880eca2e8606fa666fa67ac38b1c195ed6982c65034"
   end
 
   head do
@@ -17,8 +21,6 @@ class Metabase < Formula
     depends_on "node" => :build
     depends_on "yarn" => :build
   end
-
-  bottle :unneeded
 
   # metabase uses jdk.nashorn.api.scripting.JSObject
   # which is removed in Java 15
@@ -35,33 +37,13 @@ class Metabase < Formula
     bin.write_jar_script libexec/"metabase.jar", "metabase", java_version: "11"
   end
 
-  plist_options startup: true, manual: "metabase"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-        <key>KeepAlive</key>
-        <true/>
-        <key>Label</key>
-        <string>#{plist_name}</string>
-        <key>ProgramArguments</key>
-        <array>
-          <string>#{opt_bin}/metabase</string>
-        </array>
-        <key>RunAtLoad</key>
-        <true/>
-        <key>WorkingDirectory</key>
-        <string>#{var}/metabase</string>
-        <key>StandardOutPath</key>
-        <string>#{var}/metabase/server.log</string>
-        <key>StandardErrorPath</key>
-        <string>/dev/null</string>
-      </dict>
-      </plist>
-    EOS
+  plist_options startup: true
+  service do
+    run opt_bin/"metabase"
+    keep_alive true
+    working_dir var/"metabase"
+    log_path var/"metabase/server.log"
+    error_log_path "/dev/null"
   end
 
   test do

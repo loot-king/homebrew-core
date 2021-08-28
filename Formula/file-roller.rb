@@ -1,15 +1,16 @@
 class FileRoller < Formula
   desc "GNOME archive manager"
   homepage "https://wiki.gnome.org/Apps/FileRoller"
-  url "https://download.gnome.org/sources/file-roller/3.38/file-roller-3.38.1.tar.xz"
-  sha256 "94a0130e12d321aa119793a14d09716523e2e4a61f29570cee53fd88dd6abc57"
+  url "https://download.gnome.org/sources/file-roller/3.40/file-roller-3.40.0.tar.xz"
+  sha256 "4a2886a3966200fb0a9cbba4e2b79f8dad9d26556498aacdaed71775590b3c0d"
   license "GPL-2.0-or-later"
 
   bottle do
-    sha256 arm64_big_sur: "9ad85c8aff2edef202726c8cc88913adb8c665e2f044c4f76b60107512767eff"
-    sha256 big_sur:       "05bb1f323b1b1f095e17db22d4df0dedd8445d8b1acae02d61e5e5ea090e4d2b"
-    sha256 catalina:      "39ee8ce6b01db0f4d78a39ad6f1522c39de262a8e9fd05483d64194ebcef8453"
-    sha256 mojave:        "32c79439711f60b47b4d5e19ae07f74955f921061872ff4143f984f4f78ad460"
+    sha256 arm64_big_sur: "ec8dd1da7d8848a40aa0cf197a6a0853335368531b780801195b23762c1275e6"
+    sha256 big_sur:       "c5a9da3650723915180b287312a0518f75cf01e191b3a7c1b6127b44f35de9b1"
+    sha256 catalina:      "8394e9a33b4c7ee7b9e2b9a85f188ee6ac88512c36aee2aaf1fa6d31b755f1a9"
+    sha256 mojave:        "bf140573b865d85ea497b500735e465963559551d382fc6a7c1a0814d3602853"
+    sha256 x86_64_linux:  "69d8649eba38a6c77ae695ae11790f53c09b3942698f9cd900ad5e14b1734aa0"
   end
 
   depends_on "itstool" => :build

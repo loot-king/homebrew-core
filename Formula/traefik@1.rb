@@ -11,17 +11,18 @@ class TraefikAT1 < Formula
   end
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "9836866bfc8f1f841fb6a1499965590091e7f6b6101c89b6d8ac71dbfb75fbbd"
-    sha256 cellar: :any_skip_relocation, big_sur:       "d3339d158804f91e81fe72c22826e9cb567701a00847a1f53a2fed828477c117"
-    sha256 cellar: :any_skip_relocation, catalina:      "31abc4df8e5dbbc52dafea7c3030598a26a7850ee579b96d3e121bc78aa6fa16"
-    sha256 cellar: :any_skip_relocation, mojave:        "fbd00ee9efa256b66af6d4650e84b4a680981f621b59fb63952ffc24618071d4"
+    rebuild 2
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "0ea0ad8d89150568cc4f33c1cdaf0cc84c7e77bec0374764d4d3882820434d22"
+    sha256 cellar: :any_skip_relocation, big_sur:       "6305adbf2774f44e0bda394fbd0f332309aed8dcf7432ce9eba655f693d90c61"
+    sha256 cellar: :any_skip_relocation, catalina:      "c0caa4ed372cb322cf1bc5f7436206ab19ac3c555cecad63f17ec63b94054f3f"
+    sha256 cellar: :any_skip_relocation, mojave:        "d0f8d61c8c23ce1b8dfd65a9f888a3b00f7f55df9480bde0486cb6176437f70c"
   end
 
   keg_only :versioned_formula
 
   depends_on "go" => :build
   depends_on "go-bindata" => :build
-  depends_on "node" => :build
+  depends_on "node@14" => :build
   depends_on "yarn" => :build
 
   def install
@@ -41,37 +42,12 @@ class TraefikAT1 < Formula
     end
   end
 
-  plist_options manual: "traefik"
-
-  def plist
-    <<~EOS
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-        <dict>
-          <key>KeepAlive</key>
-          <false/>
-          <key>Label</key>
-          <string>#{plist_name}</string>
-          <key>ProgramArguments</key>
-          <array>
-            <string>#{opt_bin}/traefik</string>
-            <string>--configfile=#{etc/"traefik/traefik.toml"}</string>
-          </array>
-          <key>EnvironmentVariables</key>
-          <dict>
-          </dict>
-          <key>RunAtLoad</key>
-          <true/>
-          <key>WorkingDirectory</key>
-          <string>#{var}</string>
-          <key>StandardErrorPath</key>
-          <string>#{var}/log/traefik.log</string>
-          <key>StandardOutPath</key>
-          <string>#{var}/log/traefik.log</string>
-        </dict>
-      </plist>
-    EOS
+  service do
+    run [opt_bin/"traefik", "--configfile=#{etc/"traefik/traefik.toml"}"]
+    keep_alive false
+    working_dir var
+    log_path var/"log/traefik.log"
+    error_log_path var/"log/traefik.log"
   end
 
   test do

@@ -4,9 +4,11 @@ class BashGitPrompt < Formula
   url "https://github.com/magicmonty/bash-git-prompt/archive/2.7.1.tar.gz"
   sha256 "5e5fc6f5133b65760fede8050d4c3bc8edb8e78bc7ce26c16db442aa94b8a709"
   license "BSD-2-Clause"
-  head "https://github.com/magicmonty/bash-git-prompt.git"
+  head "https://github.com/magicmonty/bash-git-prompt.git", branch: "master"
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "aba8fdb7276afbd19020d92a907102912674172b4ff9d4883e349fd73fd69995"
+  end
 
   def install
     share.install "gitprompt.sh", "gitprompt.fish", "git-prompt-help.sh",
@@ -29,6 +31,6 @@ class BashGitPrompt < Formula
 
   test do
     output = shell_output("/bin/sh #{share}/gitstatus.sh 2>&1")
-    assert_match "Not a git repository", output
+    assert_match "not a git repository", output
   end
 end

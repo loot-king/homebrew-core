@@ -1,20 +1,21 @@
 class Less < Formula
   desc "Pager program similar to more"
   homepage "https://www.greenwoodsoftware.com/less/index.html"
-  url "https://www.greenwoodsoftware.com/less/less-581.tar.gz"
-  sha256 "1d077f83fe7867e0ecfd278eab3122326b21c22c9161366189c38e09b96a2c65"
+  url "https://www.greenwoodsoftware.com/less/less-590.tar.gz"
+  sha256 "6aadf54be8bf57d0e2999a3c5d67b1de63808bb90deb8f77b028eafae3a08e10"
   license "GPL-3.0-or-later"
 
   livecheck do
     url :homepage
-    regex(/less[._-]v?(\d+).+?released.+?general use/i)
+    regex(/less[._-]v?(\d+(?:\.\d+)*).+?released.+?general use/i)
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "95b4a2d6ccbcadca7bb39d9b86997d92945c56d7ba421ba5a24fad5e456aa012"
-    sha256 cellar: :any, big_sur:       "2732e9582beafecf6084067ec39d547e2c6259dee8884c6dbb0ab083a9d32168"
-    sha256 cellar: :any, catalina:      "908e9936ade67b803ba14ab6c85ffae16a804baae405ffcf017f327828c8d096"
-    sha256 cellar: :any, mojave:        "55c3665b219f38f3a4bea7be9961d6c13e513cebd935408fda11bd6d84582b74"
+    sha256 cellar: :any,                 arm64_big_sur: "bc5f182ccbe6676c1647939b2dd1b66e4f66eb920bb865f94d041fccdb2bd493"
+    sha256 cellar: :any,                 big_sur:       "7b8ea7c58b438ef80d6b13fd988061543ab3413a40113cd30644cb22fa6f1081"
+    sha256 cellar: :any,                 catalina:      "ccbcf747eac1e0a8338be43a6be0e4f3fb241394a6bc0c921b6e51b4ca32c042"
+    sha256 cellar: :any,                 mojave:        "916e88216d17654f290affa519d85ad295696dc6c753d3311ed71fb4cc2f9268"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "1d3b89016d59864389e96b2c234f9f8e98254374c1b1d20847a03a8fa8bce6d2"
   end
 
   head do
@@ -24,11 +25,11 @@ class Less < Formula
   end
 
   depends_on "ncurses"
-  depends_on "pcre"
+  depends_on "pcre2"
 
   def install
-    system "make", "-f", "Makefile.aut", "dist" if build.head?
-    system "./configure", "--prefix=#{prefix}", "--with-regex=pcre"
+    system "make", "-f", "Makefile.aut", "distfiles" if build.head?
+    system "./configure", "--prefix=#{prefix}", "--with-regex=pcre2"
     system "make", "install"
   end
 

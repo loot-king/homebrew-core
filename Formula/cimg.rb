@@ -1,8 +1,8 @@
 class Cimg < Formula
   desc "C++ toolkit for image processing"
   homepage "https://cimg.eu/"
-  url "https://cimg.eu/files/CImg_2.9.7.zip"
-  sha256 "595dda9718431a123b418fa0db88e248c44590d47d9b1646970fa0503e27fa5c"
+  url "https://cimg.eu/files/CImg_2.9.8.zip"
+  sha256 "1bbb2091498a46cff0e8aa75cb77be80fef0d6b9b386eb021c9515895f13b171"
   license "CECILL-2.0"
 
   livecheck do
@@ -10,7 +10,9 @@ class Cimg < Formula
     regex(/href=.*?CImg[._-]v?(\d+(?:\.\d+)+)\.zip/i)
   end
 
-  bottle :unneeded
+  bottle do
+    sha256 cellar: :any_skip_relocation, all: "7ec65e1947ef5957bd830e111d3dd0a2ee6f7dc7c2543cb74cc268e25a23ac6c"
+  end
 
   def install
     include.install "CImg.h"

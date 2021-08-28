@@ -1,16 +1,17 @@
 class Mapcidr < Formula
   desc "Subnet/CIDR operation utility"
   homepage "https://projectdiscovery.io"
-  url "https://github.com/projectdiscovery/mapcidr/archive/v0.0.6.tar.gz"
-  sha256 "2dfcca8d6108da9cf03367f8357bed87f76d782f1001049819164e7b50841e6d"
+  url "https://github.com/projectdiscovery/mapcidr/archive/v0.0.8.tar.gz"
+  sha256 "8ff4b6ba994f8346197e5266b3939e469dec541d65701bc71134c9081e01e3ee"
   license "MIT"
   head "https://github.com/projectdiscovery/mapcidr.git"
 
   bottle do
-    sha256 cellar: :any_skip_relocation, arm64_big_sur: "72a5c2b27c8aed320b478eae7eff5690bc88be096b90f718355180b68d825d55"
-    sha256 cellar: :any_skip_relocation, big_sur:       "a9ebfe1291a2a6892cf8c785530c2a34e8d7eadb009056e2de85985c2eb63b4a"
-    sha256 cellar: :any_skip_relocation, catalina:      "eae3bfeaff3972701fbae550245f0273b406e11d780e7ea53ee744c564062df7"
-    sha256 cellar: :any_skip_relocation, mojave:        "1fbaceadcc332f73082af3af29bfb1b03e33a33a72a0320e326e024c1fc6c10b"
+    sha256 cellar: :any_skip_relocation, arm64_big_sur: "ee9e513d9c3207c4ea60e968b24d681e8aaaeb889007007815cfd7dd23b36f37"
+    sha256 cellar: :any_skip_relocation, big_sur:       "f4dbc663d7818217dd387c99c08a8ddc9e596202360d48a69ab2d28edc2f5d46"
+    sha256 cellar: :any_skip_relocation, catalina:      "6108174a8882be51d7630f7147adbc078270fc6b5e304271a0370e9555bf44a4"
+    sha256 cellar: :any_skip_relocation, mojave:        "b8c7fe7d85135eb8a9d366b1eb95ebf708dd0b21af32f8193934c8f70dd87aa4"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b19f4cc9371f930349a0f8567a48745c722e2f49b222cfb0101d4a22413b8b05"
   end
 
   depends_on "go" => :build

@@ -12,10 +12,12 @@ class Gegl < Formula
   end
 
   bottle do
-    sha256 arm64_big_sur: "5368ab13bdacfd48b40469ba260357ab217108018c23425dacc66010d34bdf9c"
-    sha256 big_sur:       "5889e5151f0b0bbc9e4d38cf55f8bf9e4baf4425b909a67dbece558c87761ba1"
-    sha256 catalina:      "ead22977dc586d10fae00ab6d4068bf39726ab8328643c300d7fa9ec18d68d94"
-    sha256 mojave:        "fe3fd1088a249e3e59794d2dc9ea5eb8cef165705d0730b675bd053cae841bd7"
+    rebuild 2
+    sha256 arm64_big_sur: "7be88b13044176edd867bbb191b255ed88f14c9a46ff39d386d9ad9284aab2e6"
+    sha256 big_sur:       "50caef9fb7dcc591ab035c2c1cd372573617ddb538701e9060a779814032726d"
+    sha256 catalina:      "2788808e5d0ec106649e389c99ef8cca417dda53b5f78c3d6c621a571d32e8c4"
+    sha256 mojave:        "80ca109fdf78762a536828c2a606878eb335c5d28dae232144a3b24d6d55983e"
+    sha256 x86_64_linux:  "bb02e24b7988c1cf5f407b9b12f2bccc0391f493e427fe82f410b29c18c30dae"
   end
 
   depends_on "glib" => :build
@@ -38,11 +40,11 @@ class Gegl < Formula
 
   def install
     args = std_meson_args + %w[
-      -Dwith-docs=false
-      -Dwith-cairo=false
-      -Dwith-jasper=false
-      -Dwith-umfpack=false
-      -Dwith-libspiro=false
+      -Ddocs=false
+      -Dcairo=disabled
+      -Djasper=disabled
+      -Dumfpack=disabled
+      -Dlibspiro=disabled
       --force-fallback-for=libnsgif,poly2tri-c
     ]
 
@@ -73,12 +75,14 @@ class Gegl < Formula
         return 0;
       }
     EOS
-    system ENV.cc, "-I#{include}/gegl-0.4", "-L#{lib}", "-lgegl-0.4",
+    system ENV.cc,
            "-I#{Formula["babl"].opt_include}/babl-0.1",
            "-I#{Formula["glib"].opt_include}/glib-2.0",
            "-I#{Formula["glib"].opt_lib}/glib-2.0/include",
            "-L#{Formula["glib"].opt_lib}", "-lgobject-2.0", "-lglib-2.0",
-           testpath/"test.c", "-o", testpath/"test"
+           testpath/"test.c",
+           "-I#{include}/gegl-0.4", "-L#{lib}", "-lgegl-0.4",
+           "-o", testpath/"test"
     system "./test"
   end
 end

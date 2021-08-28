@@ -4,6 +4,7 @@ class Libcdr < Formula
   url "https://dev-www.libreoffice.org/src/libcdr/libcdr-0.1.7.tar.xz"
   sha256 "5666249d613466b9aa1e987ea4109c04365866e9277d80f6cd9663e86b8ecdd4"
   license "MPL-2.0"
+  revision 1
 
   livecheck do
     url "https://dev-www.libreoffice.org/src/"
@@ -11,10 +12,11 @@ class Libcdr < Formula
   end
 
   bottle do
-    sha256 cellar: :any, arm64_big_sur: "545117f0c8104782de8fa516181b375017dcd6cfd7510d69ce214e62b0d0a7c6"
-    sha256 cellar: :any, big_sur:       "883b4d261503c2f254ad43fa409da835af6fe11ab6c19c8cc88ebedc7a11c8cc"
-    sha256 cellar: :any, catalina:      "0bc995af13d3f80bf3ace1eff3189c6ad56502d832ba7e3bdc9467187add0961"
-    sha256 cellar: :any, mojave:        "5d20493e2ed5e7ca5b967795453875e4b3b4fbf668a01287ddf5fc8ae013ed29"
+    sha256 cellar: :any,                 arm64_big_sur: "5ae923701714fad81fced4eb8c7eb2c171c3e675c685a0649b561004a587a03b"
+    sha256 cellar: :any,                 big_sur:       "0c5c055abec9d36ae8beaaf07e0268cb5b4495ec3103b933b03ff2676d96d049"
+    sha256 cellar: :any,                 catalina:      "e79b945338269508e453ed4f8748d0a9b5e19304658621765c2eae54120d0537"
+    sha256 cellar: :any,                 mojave:        "42016c8a3b6e75ce702e84f2afdf3c328807b776b10e9c809772c0f69d569d1a"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "b6cf82a1af01f907eb5476947c63b6a9241c5d5d72291f3f2263c1e6c5b70cdf"
   end
 
   depends_on "cppunit" => :build

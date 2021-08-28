@@ -1,20 +1,22 @@
 class FluentBit < Formula
-  desc "Data Collector for IoT"
+  desc "Fast and Lightweight Logs and Metrics processor"
   homepage "https://github.com/fluent/fluent-bit"
-  url "https://github.com/fluent/fluent-bit/archive/v1.7.4.tar.gz"
-  sha256 "4ef144e429e3ac8583dbc9b2679f0dc70851e116ff0fc73dafcbe8ba7252ec31"
+  url "https://github.com/fluent/fluent-bit/archive/v1.8.4.tar.gz"
+  sha256 "9debe7b13e0ebb093058d4ca75125c980b38226bd4928f908357a894691f397d"
   license "Apache-2.0"
   head "https://github.com/fluent/fluent-bit.git"
 
   livecheck do
     url :stable
-    regex(/^v?(\d+(?:\.\d+)+)$/i)
+    strategy :github_latest
   end
 
   bottle do
-    sha256 cellar: :any, big_sur:  "b8b1b64e8fea20dac5d7aa8f96a8d6f6321718d6c7d48710967e026bbb6e98f7"
-    sha256 cellar: :any, catalina: "ea2bc8ee10b30fa19b4051ca6375fc77edf4a334db8a13fa72383b517a2c2679"
-    sha256 cellar: :any, mojave:   "63fb494a86a0768058363e0ccb9b546f369f603d98539d4f8d2b058aed6aec03"
+    sha256 cellar: :any,                 arm64_big_sur: "190b4b02d89f7a58922e5bb5f416fe52a7ef0a4d964df796b6b1c3813a727519"
+    sha256 cellar: :any,                 big_sur:       "25ae171ba11f124606b5359b812592bc4951dc4e096b919e79d5ec50059d7812"
+    sha256 cellar: :any,                 catalina:      "936fca5833532f268ffd664fd0c1992999be85b7656ef347b07e5d3a9815d917"
+    sha256 cellar: :any,                 mojave:        "5c701a939ec7ae30355ecadbb50f40abd3b16406f5a9570a5867d6ebabc5bc1d"
+    sha256 cellar: :any_skip_relocation, x86_64_linux:  "13466efa595f89ae6187698f11a63ab710b6b396b9bf79281f6caa837de1560d"
   end
 
   depends_on "bison" => :build
@@ -25,14 +27,27 @@ class FluentBit < Formula
     depends_on "openssl@1.1"
   end
 
-  def install
-    # Per https://luajit.org/install.html: If MACOSX_DEPLOYMENT_TARGET
-    # is not set then it's forced to 10.4, which breaks compile on Mojave.
-    # fluent-bit builds against a vendored Luajit.
-    ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version
+  # Apply https://github.com/fluent/fluent-bit/pull/3564 to build on M1
+  patch do
+    url "https://github.com/fluent/fluent-bit/commit/fcdf304e5abc3e3b66b1acac76dbaf23b2d22579.patch?full_index=1"
+    sha256 "80d1b0b6916ff1e0c157e6824afa769f08e28e764f65bfd28df0900d6f9bda1e"
+  end
 
-    system "cmake", ".", "-DWITH_IN_MEM=OFF", *std_cmake_args
-    system "make", "install"
+  # Fix error: use of undeclared identifier 'clock_serv_t'
+  #
+  # Also: don't install any service script for Linux
+  patch :DATA
+
+  def install
+    chdir "build" do
+      # Per https://luajit.org/install.html: If MACOSX_DEPLOYMENT_TARGET
+      # is not set then it's forced to 10.4, which breaks compile on Mojave.
+      # fluent-bit builds against a vendored Luajit.
+      ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version
+
+      system "cmake", "..", "-DWITH_IN_MEM=OFF", *std_cmake_args
+      system "make", "install"
+    end
   end
 
   test do
@@ -40,3 +55,82 @@ class FluentBit < Formula
     assert_equal "Fluent Bit v#{version}", output
   end
 end
+
+__END__
+diff --git a/lib/cmetrics/src/cmt_time.c b/lib/cmetrics/src/cmt_time.c
+index 0671542a..67f1c368 100644
+--- a/lib/cmetrics/src/cmt_time.c
++++ b/lib/cmetrics/src/cmt_time.c
+@@ -20,7 +20,7 @@
+ #include <cmetrics/cmt_info.h>
+
+ /* MacOS */
+-#ifdef FLB_HAVE_CLOCK_GET_TIME
++#ifdef CMT_HAVE_CLOCK_GET_TIME
+ #include <mach/clock.h>
+ #include <mach/mach.h>
+ #endif
+@@ -41,8 +41,8 @@ uint64_t cmt_time_now()
+     mach_timespec_t mts;
+     host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+     clock_get_time(cclock, &mts);
+-    tm->tv_sec = mts.tv_sec;
+-    tm->tv_nsec = mts.tv_nsec;
++    tm.tv_sec = mts.tv_sec;
++    tm.tv_nsec = mts.tv_nsec;
+     mach_port_deallocate(mach_task_self(), cclock);
+ #else /* __STDC_VERSION__ */
+     clock_gettime(CLOCK_REALTIME, &tm);
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index f6654506..fe117172 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -434,27 +434,6 @@ if(FLB_BINARY)
+       DESTINATION "${FLB_INSTALL_BINDIR}")
+   endif()
+
+-  # Detect init system, install upstart, systemd or init.d script
+-  if(IS_DIRECTORY /lib/systemd/system)
+-    set(FLB_SYSTEMD_SCRIPT "${PROJECT_SOURCE_DIR}/init/${FLB_OUT_NAME}.service")
+-    configure_file(
+-      "${PROJECT_SOURCE_DIR}/init/systemd.in"
+-      ${FLB_SYSTEMD_SCRIPT}
+-      )
+-    install(FILES ${FLB_SYSTEMD_SCRIPT} COMPONENT binary DESTINATION /lib/systemd/system)
+-    install(DIRECTORY DESTINATION ${FLB_INSTALL_CONFDIR} COMPONENT binary)
+-  elseif(IS_DIRECTORY /usr/share/upstart)
+-    set(FLB_UPSTART_SCRIPT "${PROJECT_SOURCE_DIR}/init/${FLB_OUT_NAME}.conf")
+-    configure_file(
+-      "${PROJECT_SOURCE_DIR}/init/upstart.in"
+-      ${FLB_UPSTART_SCRIPT}
+-      )
+-    install(FILES ${FLB_UPSTART_SCRIPT} COMPONENT binary DESTINATION /etc/init)
+-    install(DIRECTORY DESTINATION COMPONENT binary ${FLB_INSTALL_CONFDIR})
+-  else()
+-    # FIXME: should we support Sysv init script ?
+-  endif()
+-
+   install(FILES
+     "${PROJECT_SOURCE_DIR}/conf/fluent-bit.conf"
+     DESTINATION ${FLB_INSTALL_CONFDIR}
+diff --git a/src/flb_time.c b/src/flb_time.c
+index 9f3d5964..bdc89d7e 100644
+--- a/src/flb_time.c
++++ b/src/flb_time.c
+@@ -52,13 +52,13 @@ static int _flb_time_get(struct flb_time *tm)
+ #elif defined FLB_HAVE_TIMESPEC_GET
+     /* C11 supported! */
+     return timespec_get(&tm->tm, TIME_UTC);
+-#elif defined FLB_CLOCK_GET_TIME
++#elif defined FLB_HAVE_CLOCK_GET_TIME
+     clock_serv_t cclock;
+     mach_timespec_t mts;
+     host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+     clock_get_time(cclock, &mts);
+-    tm->tv_sec = mts.tv_sec;
+-    tm->tv_nsec = mts.tv_nsec;
++    tm->tm.tv_sec = mts.tv_sec;
++    tm->tm.tv_nsec = mts.tv_nsec;
+     return mach_port_deallocate(mach_task_self(), cclock);
+ #else /* __STDC_VERSION__ */
+     return clock_gettime(CLOCK_REALTIME, &tm->tm);
